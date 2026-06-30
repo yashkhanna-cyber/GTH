@@ -63,8 +63,8 @@ export default function AdminLoginPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20 group-hover:shadow-red-500/30 transition-all">
-                <Shield className="w-6 h-6 text-white" />
+              <div className="h-12 px-3 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
+                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-8 object-contain" />
               </div>
               <div className="text-left">
                 <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH Admin</span>

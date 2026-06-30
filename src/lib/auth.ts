@@ -61,5 +61,11 @@ export async function getAuthUser(): Promise<JWTPayload | null> {
 
 export async function clearAuthCookie(): Promise<void> {
   const cookieStore = await cookies()
-  cookieStore.delete(COOKIE_NAME)
+  cookieStore.set(COOKIE_NAME, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires: new Date(0),
+    path: '/',
+  })
 }

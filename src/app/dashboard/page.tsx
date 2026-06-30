@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useUser } from './layout'
-import { Trophy, Target, Zap, Users, ArrowUpRight, Clock, CheckCircle2, BarChart3, Loader2 } from 'lucide-react'
+import { Trophy, Target, Zap, Users, ArrowUpRight, Clock, CheckCircle2, BarChart3, Loader2, Megaphone, Info, AlertTriangle, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 interface TaskData {
@@ -17,6 +17,7 @@ export default function DashboardPage() {
   const { user } = useUser()
   const [tasks, setTasks] = useState<TaskData[]>([])
   const [loadingTasks, setLoadingTasks] = useState(true)
+  const [announcements, setAnnouncements] = useState<any[]>([])
   const [activities, setActivities] = useState<{ action: string; time: string; type: string }[]>([
     { action: 'Welcome to GTH TechVerse 2026!', time: 'Just now', type: 'system' }
   ])
@@ -46,6 +47,16 @@ export default function DashboardPage() {
         }
       })
       .catch(err => console.error(err))
+
+    // Fetch announcements
+    fetch('/api/announcements')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.announcements) {
+          setAnnouncements(data.announcements.slice(0, 2)) // Get top 2 latest announcements
+        }
+      })
+      .catch(err => console.error(err))
   }, [])
 
   const totalPoints = user?.student?.leaderboard?.totalPoints ?? 0
@@ -58,8 +69,43 @@ export default function DashboardPage() {
     { label: 'Team', value: user?.student?.team?.name || 'No Team', icon: Users, color: 'from-emerald-500 to-green-500', change: 'Your assigned team' },
   ]
 
+  const typeStyles: Record<string, { color: string; border: string; bg: string; icon: typeof Info }> = {
+    INFO: { color: 'text-blue-400', border: 'border-blue-500/20', bg: 'bg-blue-500/5', icon: Info },
+    SUCCESS: { color: 'text-emerald-400', border: 'border-emerald-500/20', bg: 'bg-emerald-500/5', icon: CheckCircle2 },
+    WARNING: { color: 'text-yellow-400', border: 'border-yellow-500/20', bg: 'bg-yellow-500/5', icon: AlertTriangle },
+    ERROR: { color: 'text-red-400', border: 'border-red-500/20', bg: 'bg-red-500/5', icon: Zap }
+  }
+
   return (
     <div className="space-y-6">
+      {/* Announcements Banner Section */}
+      {announcements.length > 0 && (
+        <div className="space-y-3">
+          {announcements.map((ann) => {
+            const style = typeStyles[ann.type] || typeStyles.INFO
+            const AlertIcon = style.icon
+            return (
+              <div
+                key={ann.id}
+                className={`p-4 rounded-2xl border ${style.border} ${style.bg} flex items-start gap-3 transition-all hover:bg-slate-800/20 relative overflow-hidden group`}
+              >
+                <div className="absolute top-0 right-0 w-24 h-24 bg-white/2 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+                <div className={`p-2 rounded-xl bg-slate-900/60 border border-slate-800 ${style.color}`}>
+                  <AlertIcon className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0 pr-4">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`text-xs font-bold ${style.color}`}>{ann.title}</span>
+                    <span className="text-[9px] text-slate-500 font-mono">• {new Date(ann.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-xs text-slate-350 mt-1 leading-relaxed">{ann.message}</p>
+                </div>
+                <Megaphone className="w-4 h-4 text-slate-500 shrink-0 self-center opacity-40 group-hover:scale-110 transition-transform" />
+              </div>
+            )
+          })}
+        </div>
+      )}
       {/* Welcome Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-red-500 to-red-700 p-6 sm:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4" />

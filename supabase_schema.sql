@@ -284,3 +284,41 @@ CREATE POLICY "Allow update for own team invitation or admins"
     ON public.team_invitations FOR UPDATE TO authenticated USING (student_id = auth.uid() OR public.is_admin(auth.uid()));
 
 
+-- --- ANNOUNCEMENTS SYSTEM ---
+CREATE TABLE IF NOT EXISTS public.announcements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    type TEXT NOT NULL DEFAULT 'INFO' CHECK (type IN ('INFO', 'SUCCESS', 'WARNING', 'ERROR')),
+    target_group TEXT NOT NULL DEFAULT 'ALL', -- 'ALL' or specific batches
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.announcements ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow select for authenticated users on announcements"
+    ON public.announcements FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Allow write access for admins on announcements"
+    ON public.announcements FOR ALL TO authenticated USING (public.is_admin(auth.uid()));
+
+
+-- --- CERTIFICATES SYSTEM ---
+CREATE TABLE IF NOT EXISTS public.certificates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    required_xp INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow select for authenticated users on certificates"
+    ON public.certificates FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Allow write access for admins on certificates"
+    ON public.certificates FOR ALL TO authenticated USING (public.is_admin(auth.uid()));
+
+
+

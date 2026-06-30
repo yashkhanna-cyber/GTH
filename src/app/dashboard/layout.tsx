@@ -56,7 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/login')
+    window.location.href = '/login'
   }
 
   if (loading) {
@@ -87,8 +87,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Logo */}
           <div className="p-5 flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
-                <Sparkles className="w-4.5 h-4.5 text-white" />
+              <div className="h-9 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-6 object-contain" />
               </div>
               <div>
                 <span className={`font-bold text-sm block leading-tight ${darkMode ? 'text-white' : 'text-slate-900'}`} style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>

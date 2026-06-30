@@ -32,8 +32,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20 group-hover:shadow-red-500/40 transition-all">
-            <Sparkles className="w-5 h-5 text-white" />
+          <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
+            <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
           </div>
           <div className="flex flex-col">
             <span className="text-white font-bold text-lg leading-tight tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>

@@ -18,7 +18,6 @@ const adminLinks = [
   { name: 'Projects', href: '/admin/projects', icon: FolderKanban },
   { name: 'Tasks', href: '/admin/tasks', icon: ClipboardList },
   { name: 'Attendance', href: '/admin/attendance', icon: CalendarCheck },
-  { name: 'Mentors', href: '/admin/mentors', icon: UserCog },
   { name: 'Announcements', href: '/admin/announcements', icon: Megaphone },
   { name: 'Certificates', href: '/admin/certificates', icon: BadgeCheck },
   { name: 'Referrals', href: '/admin/referrals', icon: Share2 },

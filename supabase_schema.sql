@@ -209,6 +209,13 @@ INSERT INTO storage.buckets (id, name, public) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- Storage policies
+DROP POLICY IF EXISTS "Allow public access to read objects" ON storage.objects;
+DROP POLICY IF EXISTS "Allow admins to manage project-pdfs" ON storage.objects;
+DROP POLICY IF EXISTS "Allow students and admins to insert into task-submissions" ON storage.objects;
+DROP POLICY IF EXISTS "Allow students and admins to insert into profile-images" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated users to insert into documents" ON storage.objects;
+DROP POLICY IF EXISTS "Allow authenticated users to insert into images" ON storage.objects;
+
 CREATE POLICY "Allow public access to read objects"
     ON storage.objects FOR SELECT USING (true);
 

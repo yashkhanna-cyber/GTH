@@ -53,6 +53,7 @@ CREATE TABLE public.projects (
     description TEXT NOT NULL,
     instruction_pdf TEXT NOT NULL, -- Public storage URL
     assigned_to TEXT NOT NULL DEFAULT 'ALL' CHECK (assigned_to IN ('ALL', 'BATCH', 'TEAM')),
+    assigned_target TEXT,
     created_by UUID REFERENCES public.users(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -67,6 +68,7 @@ CREATE TABLE public.tasks (
     deadline TIMESTAMP WITH TIME ZONE,
     reference_file TEXT, -- Public storage URL
     assigned_to TEXT NOT NULL DEFAULT 'ALL' CHECK (assigned_to IN ('ALL', 'BATCH', 'TEAM')),
+    assigned_target TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

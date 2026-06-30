@@ -200,10 +200,10 @@ export default function AdminProjectsPage() {
                     </span>
                     <button
                       onClick={() => handleDeleteProject(project.id)}
-                      className="text-slate-450 hover:text-red-400 p-1 rounded hover:bg-red-500/10 transition-all"
+                      className="text-slate-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-500/10 transition-all"
                       title="Delete Project"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

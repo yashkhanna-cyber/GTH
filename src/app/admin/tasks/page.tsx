@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ClipboardList, Plus, FileText, X, CheckCircle2, AlertCircle, Loader2, Calendar, Users, Award, MessageSquare, ExternalLink, ShieldAlert, Check, RefreshCw } from 'lucide-react'
+import { ClipboardList, Plus, FileText, X, CheckCircle2, AlertCircle, Loader2, Calendar, Users, Award, MessageSquare, ExternalLink, ShieldAlert, Check, RefreshCw, Trash2 } from 'lucide-react'
 
 interface Student {
   id: string
@@ -173,6 +173,24 @@ export default function AdminTasksPage() {
     } finally {
       setSubmitting(false)
     }
+  const handleDeleteTask = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this task? This will also remove all student submissions for this task.')) return
+
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      })
+      const data = await res.json()
+      if (data.success) {
+        fetchData()
+      } else {
+        alert(data.error || 'Failed to delete task')
+      }
+    } catch {
+      alert('Something went wrong. Please try again.')
+    }
   }
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -330,10 +348,19 @@ export default function AdminTasksPage() {
                         ? `Batch: ${t.assignedTarget}`
                         : `Team: ${t.assignedTarget}`}
                     </span>
-                    <span className="text-[9px] text-slate-550 flex items-center gap-1 font-mono">
-                      <Calendar className="w-3.5 h-3.5" />
-                      {new Date(t.createdAt).toLocaleDateString()}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] text-slate-550 flex items-center gap-1 font-mono">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {new Date(t.createdAt).toLocaleDateString()}
+                      </span>
+                      <button
+                        onClick={() => handleDeleteTask(t.id)}
+                        className="text-slate-450 hover:text-red-400 p-1 rounded hover:bg-red-500/10 transition-all"
+                        title="Delete Task"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
 
                   <h3 className="text-white font-bold text-base mb-2" style={{ fontFamily: 'var(--font-display)' }}>

@@ -172,3 +172,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create project' }, { status: 500 })
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const user = await getAuthUser()
+    if (!user || user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
+    const { id } = await req.json()
+    if (!id) {
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 })
+    }
+
+    const { data: project } = await supabaseAdmin
+      .from('projects')
+      .select('instruction_pdf')
+      .eq('id', id)
+      .maybeSingle()
+
+    const { error: deleteError } = await supabaseAdmin
+      .from('projects')
+      .delete()
+      .eq('id', id)
+
+    if (deleteError) {
+      console.error('Delete project error:', deleteError)
+      return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 })
+    }
+
+    if (project?.instruction_pdf) {
+      const filename = project.instruction_pdf.split('/').pop()
+      if (filename) {
+        await supabaseAdmin.storage.from('project-pdfs').remove([filename])
+      }
+    }
+
+    return NextResponse.json({ success: true, message: 'Project deleted successfully' })
+  } catch (error) {
+    console.error('Delete project error:', error)
+    return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 })
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FolderKanban, Plus, FileText, X, CheckCircle2, AlertCircle, Loader2, Calendar, Users, Briefcase } from 'lucide-react'
+import { FolderKanban, Plus, FileText, X, CheckCircle2, AlertCircle, Loader2, Calendar, Users, Briefcase, Trash2 } from 'lucide-react'
 
 interface Project {
   id: string
@@ -120,6 +120,26 @@ export default function AdminProjectsPage() {
     }
   }
 
+  const handleDeleteProject = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this project? This will also remove the uploaded PDF from storage.')) return
+
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      })
+      const data = await res.json()
+      if (data.success) {
+        fetchData()
+      } else {
+        alert(data.error || 'Failed to delete project')
+      }
+    } catch {
+      alert('Something went wrong. Please try again.')
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
@@ -173,10 +193,19 @@ export default function AdminProjectsPage() {
                       ? `Batch: ${project.assignedTarget}`
                       : `Team: ${project.assignedTarget}`}
                   </span>
-                  <span className="text-[9px] text-slate-500 flex items-center gap-1 font-mono">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {new Date(project.createdAt).toLocaleDateString()}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] text-slate-550 flex items-center gap-1 font-mono">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {new Date(project.createdAt).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => handleDeleteProject(project.id)}
+                      className="text-slate-450 hover:text-red-400 p-1 rounded hover:bg-red-500/10 transition-all"
+                      title="Delete Project"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 <h3 className="text-white font-bold text-base group-hover:text-red-400 transition-colors mb-2" style={{ fontFamily: 'var(--font-display)' }}>

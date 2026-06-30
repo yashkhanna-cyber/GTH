@@ -237,3 +237,45 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create task' }, { status: 500 })
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const user = await getAuthUser()
+    if (!user || user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
+    const { id } = await req.json()
+    if (!id) {
+      return NextResponse.json({ error: 'Task ID is required' }, { status: 400 })
+    }
+
+    const { data: task } = await supabaseAdmin
+      .from('tasks')
+      .select('reference_file')
+      .eq('id', id)
+      .maybeSingle()
+
+    const { error: deleteError } = await supabaseAdmin
+      .from('tasks')
+      .delete()
+      .eq('id', id)
+
+    if (deleteError) {
+      console.error('Delete task error:', deleteError)
+      return NextResponse.json({ error: 'Failed to delete task' }, { status: 500 })
+    }
+
+    if (task?.reference_file) {
+      const filename = task.reference_file.split('/').pop()
+      if (filename) {
+        await supabaseAdmin.storage.from('documents').remove([filename])
+      }
+    }
+
+    return NextResponse.json({ success: true, message: 'Task deleted successfully' })
+  } catch (error) {
+    console.error('Delete task error:', error)
+    return NextResponse.json({ error: 'Failed to delete task' }, { status: 500 })
+  }
+}

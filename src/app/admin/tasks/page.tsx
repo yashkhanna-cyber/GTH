@@ -173,6 +173,8 @@ export default function AdminTasksPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
   const handleDeleteTask = async (id: string) => {
     if (!confirm('Are you sure you want to delete this task? This will also remove all student submissions for this task.')) return
 

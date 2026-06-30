@@ -254,3 +254,33 @@ CREATE POLICY "Allow select for own attendance or admins on attendance"
 CREATE POLICY "Allow write access for admins on attendance"
     ON public.attendance FOR ALL TO authenticated USING (public.is_admin(auth.uid()));
 
+-- --- TEAM SYSTEM UPDATES & INVITATIONS ---
+ALTER TABLE public.teams ADD COLUMN IF NOT EXISTS tagline TEXT;
+ALTER TABLE public.teams ADD COLUMN IF NOT EXISTS leader_id UUID REFERENCES public.users(id) ON DELETE SET NULL;
+
+CREATE TABLE IF NOT EXISTS public.team_invitations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    team_id UUID REFERENCES public.teams(id) ON DELETE CASCADE NOT NULL,
+    student_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('PENDING', 'ACCEPTED', 'REJECTED')) DEFAULT 'PENDING',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE (team_id, student_id)
+);
+
+ALTER TABLE public.team_invitations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow select for own team invitations or admins"
+    ON public.team_invitations FOR SELECT TO authenticated USING (student_id = auth.uid() OR public.is_admin(auth.uid()));
+
+CREATE POLICY "Allow insert for team leader or admins"
+    ON public.team_invitations FOR INSERT TO authenticated WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.teams t 
+            WHERE t.id = team_id AND (t.leader_id = auth.uid() OR public.is_admin(auth.uid()))
+        )
+    );
+
+CREATE POLICY "Allow update for own team invitation or admins"
+    ON public.team_invitations FOR UPDATE TO authenticated USING (student_id = auth.uid() OR public.is_admin(auth.uid()));
+
+

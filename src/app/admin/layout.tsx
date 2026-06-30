@@ -13,6 +13,7 @@ import {
 const adminLinks = [
   { name: 'Overview', href: '/admin', icon: LayoutDashboard },
   { name: 'Students', href: '/admin/students', icon: Users },
+  { name: 'Teams', href: '/admin/teams', icon: Users },
   { name: 'Points', href: '/admin/points', icon: Trophy },
   { name: 'Leaderboard', href: '/admin/leaderboard', icon: BarChart3 },
   { name: 'Projects', href: '/admin/projects', icon: FolderKanban },

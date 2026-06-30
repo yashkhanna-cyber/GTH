@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Bell, CheckCircle2, Info, AlertTriangle, Zap, RefreshCw, Check } from 'lucide-react'
+import { Bell, CheckCircle2, Info, AlertTriangle, Zap, RefreshCw, Check, Users } from 'lucide-react'
 
 interface NotificationItem {
   id: string
@@ -122,6 +122,16 @@ export default function NotificationsPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-white font-medium truncate">{n.title}</p>
                   <p className="text-xs text-slate-400 mt-1 leading-relaxed">{n.message}</p>
+                  {n.title === 'Team Invitation' && (
+                    <div className="mt-3">
+                      <a
+                        href="/dashboard/team"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-orange-500/10"
+                      >
+                        <Users className="w-3.5 h-3.5" /> View Invitation & Join
+                      </a>
+                    </div>
+                  )}
                   <p className="text-[10px] text-slate-500 mt-2 font-mono">{n.time}</p>
                 </div>
                 {!n.read && (

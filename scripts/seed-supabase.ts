@@ -63,12 +63,12 @@ async function main() {
 
   // 3. Insert Admin User
   console.log('Creating Admin Auth user...')
-  const adminEmail = 'admin@gth.com'
+  const adminEmail = 'yash.2201301063@geetauniversity.edu.in'
   const { data: authAdmin, error: adminAuthError } = await supabaseAdmin.auth.admin.createUser({
     email: adminEmail,
-    password: 'password123',
+    password: 'Y1a2s3h4',
     email_confirm: true,
-    user_metadata: { name: 'GTH Admin' }
+    user_metadata: { name: 'Yash Admin' }
   })
 
   if (adminAuthError || !authAdmin.user) {
@@ -78,11 +78,11 @@ async function main() {
   console.log('Inserting Admin user profile...')
   const { error: adminProfileError } = await supabaseAdmin.from('users').insert({
     id: authAdmin.user.id,
-    full_name: 'GTH Admin',
+    full_name: 'Yash Admin',
     email: adminEmail,
     role: 'Admin',
     department: 'Management',
-    referral_code: 'GTH-ADMIN',
+    referral_code: 'GTH-YASHADMIN',
     total_points: 0
   })
 

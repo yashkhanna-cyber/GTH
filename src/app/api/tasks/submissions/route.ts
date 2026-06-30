@@ -218,3 +218,104 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to process submission' }, { status: 500 })
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    const user = await getAuthUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+    }
+
+    if (user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    }
+
+    const { submissionId, status, reviewComments, pointsAwarded } = await req.json()
+
+    if (!submissionId || !status) {
+      return NextResponse.json({ error: 'Missing submission ID or status' }, { status: 400 })
+    }
+
+    // 1. Fetch submission details
+    const { data: submission, error: subError } = await supabaseAdmin
+      .from('task_submissions')
+      .select('*, tasks(points, title)')
+      .eq('id', submissionId)
+      .maybeSingle()
+
+    if (subError || !submission) {
+      return NextResponse.json({ error: 'Submission not found' }, { status: 404 })
+    }
+
+    const task = submission.tasks as any
+    const pointsToAward = status === 'APPROVED' ? (pointsAwarded !== undefined ? Number(pointsAwarded) : (task?.points || 0)) : 0
+
+    // 2. Fetch student profile
+    const { data: student, error: studentError } = await supabaseAdmin
+      .from('users')
+      .select('*')
+      .eq('id', submission.student_id)
+      .maybeSingle()
+
+    if (studentError || !student) {
+      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
+    }
+
+    // 3. Update Submission Status
+    const { error: updateSubError } = await supabaseAdmin
+      .from('task_submissions')
+      .update({
+        status,
+        review_comment: reviewComments,
+        points_awarded: pointsToAward
+      })
+      .eq('id', submissionId)
+
+    if (updateSubError) {
+      console.error('Update submission error:', updateSubError)
+      return NextResponse.json({ error: 'Failed to update submission status' }, { status: 500 })
+    }
+
+    // 4. If approved, award points
+    if (status === 'APPROVED' && pointsToAward > 0) {
+      const newPoints = (student.total_points || 0) + pointsToAward
+      await supabaseAdmin
+        .from('users')
+        .update({ total_points: newPoints })
+        .eq('id', student.id)
+
+      await supabaseAdmin
+        .from('points_history')
+        .insert({
+          student_id: student.id,
+          points: pointsToAward,
+          reason: `Task submission approved: ${task?.title || 'Task'}`,
+          given_by: user.userId
+        })
+
+      await supabaseAdmin
+        .from('notifications')
+        .insert({
+          student_id: student.id,
+          title: 'Task Approved!',
+          message: `Your submission for task "${task?.title || 'Task'}" has been approved! You received ${pointsToAward} points.`,
+          is_read: false
+        })
+    } else if (status !== 'APPROVED') {
+      const statusLabel = status === 'CHANGES_REQUESTED' ? 'Changes Requested' : 'Rejected'
+      await supabaseAdmin
+        .from('notifications')
+        .insert({
+          student_id: student.id,
+          title: `Task Submission Update: ${statusLabel}`,
+          message: `Your submission for task "${task?.title || 'Task'}" was reviewed. Status: ${statusLabel}. Comments: ${reviewComments}`,
+          is_read: false
+        })
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Submission review error:', error)
+    return NextResponse.json({ error: 'Failed to process submission review' }, { status: 500 })
+  }
+}

@@ -78,6 +78,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required parameters or invalid status' }, { status: 400 })
     }
 
+    // Enforce that attendance can only be modified on the same day before 12:00 AM midnight
+    const now = new Date()
+    const todayUTC = now.toISOString().split('T')[0]
+    const todayIST = new Date(now.getTime() + 5.5 * 60 * 60 * 1000).toISOString().split('T')[0]
+
+    if (date !== todayUTC && date !== todayIST) {
+      return NextResponse.json({ error: 'Attendance can only be modified on the same day before 12:00 AM midnight.' }, { status: 400 })
+    }
+
     // 1. Fetch current status to see if it is changing
     const { data: currentRecord } = await supabaseAdmin
       .from('attendance')

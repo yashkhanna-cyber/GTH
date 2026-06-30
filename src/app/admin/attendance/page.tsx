@@ -70,7 +70,27 @@ export default function AdminAttendancePage() {
     fetchAttendance()
   }, [selectedDate])
 
-  const handleMarkAttendance = async (studentId: string, status: 'PRESENT' | 'ABSENT') => {
+  const [editingStudents, setEditingStudents] = useState<Record<string, boolean>>({})
+  const [localStatuses, setLocalStatuses] = useState<Record<string, 'PRESENT' | 'ABSENT' | null>>({})
+
+  // Helper to check if a date is today (local timezone)
+  const isDateEditable = (dateStr: string) => {
+    if (!dateStr) return false
+    const today = new Date()
+    const offset = today.getTimezoneOffset()
+    const localToday = new Date(today.getTime() - offset * 60 * 1000).toISOString().split('T')[0]
+    return dateStr === localToday
+  }
+
+  const startEditing = (studentId: string) => {
+    setEditingStudents(prev => ({ ...prev, [studentId]: true }))
+  }
+
+  const selectLocalStatus = (studentId: string, status: 'PRESENT' | 'ABSENT') => {
+    setLocalStatuses(prev => ({ ...prev, [studentId]: status }))
+  }
+
+  const saveAttendance = async (studentId: string, status: 'PRESENT' | 'ABSENT') => {
     setUpdatingId(studentId)
     setError(null)
     try {
@@ -90,6 +110,14 @@ export default function AdminAttendancePage() {
         setStudents(prev =>
           prev.map(s => (s.id === studentId ? { ...s, status } : s))
         )
+        // Lock editing state for this student
+        setEditingStudents(prev => ({ ...prev, [studentId]: false }))
+        // Clear local state
+        setLocalStatuses(prev => {
+          const next = { ...prev }
+          delete next[studentId]
+          return next
+        })
       } else {
         setError(data.error || 'Failed to update attendance')
       }
@@ -270,46 +298,95 @@ CREATE POLICY "Allow write access for admins on attendance"
 
                   {/* Right Side: Quick Action buttons */}
                   <div className="flex items-center gap-2">
-                    {/* Status Badge */}
-                    {student.status && (
-                      <span
-                        className={`text-[9px] font-bold px-2 py-0.5 rounded-full mr-2 uppercase tracking-wide ${
-                          student.status === 'PRESENT'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
-                        }`}
-                      >
-                        {student.status}
-                      </span>
+                    {!isDateEditable(selectedDate) ? (
+                      // PAST DATE LOCK: Just show status or Unmarked
+                      student.status ? (
+                        <span
+                          className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide ${
+                            student.status === 'PRESENT'
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                          }`}
+                        >
+                          {student.status}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-slate-900/40 text-slate-500 border border-slate-800 uppercase tracking-wide">
+                          Unmarked
+                        </span>
+                      )
+                    ) : (
+                      // EDITABLE TODAY: Custom Update & Toggle Flow
+                      <>
+                        {!(editingStudents[student.id] || student.status === null) ? (
+                          // Locked State (Already Marked): Show Badge + "Update" button to unlock
+                          <>
+                            <span
+                              className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide ${
+                                student.status === 'PRESENT'
+                                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                                  : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                              }`}
+                            >
+                              {student.status}
+                            </span>
+                            <button
+                              onClick={() => startEditing(student.id)}
+                              className="px-3 py-1.5 bg-slate-900/40 text-slate-400 border border-slate-800 rounded-xl hover:text-white hover:border-slate-700 text-xs font-semibold transition-all"
+                            >
+                              Update
+                            </button>
+                          </>
+                        ) : (
+                          // Editing State (or Unmarked): Show Tick + Cross + "Update" button to save
+                          (() => {
+                            const activeStatus = localStatuses[student.id] !== undefined 
+                              ? localStatuses[student.id] 
+                              : student.status;
+                            return (
+                              <>
+                                {/* Present/Tick button */}
+                                <button
+                                  disabled={updatingId === student.id}
+                                  onClick={() => selectLocalStatus(student.id, 'PRESENT')}
+                                  className={`p-2 rounded-xl transition-all duration-200 border ${
+                                    activeStatus === 'PRESENT'
+                                      ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/35 hover:bg-emerald-500/30'
+                                      : 'bg-slate-900/40 text-slate-500 border-slate-800 hover:text-emerald-400 hover:border-emerald-500/30'
+                                  } disabled:opacity-50`}
+                                  title="Mark Present"
+                                >
+                                  <Check className="w-4 h-4" />
+                                </button>
+
+                                {/* Absent/Cross button */}
+                                <button
+                                  disabled={updatingId === student.id}
+                                  onClick={() => selectLocalStatus(student.id, 'ABSENT')}
+                                  className={`p-2 rounded-xl transition-all duration-200 border ${
+                                    activeStatus === 'ABSENT'
+                                      ? 'bg-red-500/20 text-red-400 border-red-500/35 hover:bg-red-500/30'
+                                      : 'bg-slate-900/40 text-slate-500 border-slate-800 hover:text-red-400 hover:border-red-500/30'
+                                  } disabled:opacity-50`}
+                                  title="Mark Absent"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+
+                                {/* Save/Update action button */}
+                                <button
+                                  disabled={updatingId === student.id || !activeStatus}
+                                  onClick={() => activeStatus && saveAttendance(student.id, activeStatus)}
+                                  className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 disabled:bg-slate-800 disabled:text-slate-650 disabled:border-slate-850 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-orange-500/10 flex items-center gap-1"
+                                >
+                                  {updatingId === student.id ? 'Saving...' : 'Update'}
+                                </button>
+                              </>
+                            );
+                          })()
+                        )}
+                      </>
                     )}
-
-                    {/* Present/Tick button */}
-                    <button
-                      disabled={updatingId === student.id}
-                      onClick={() => handleMarkAttendance(student.id, 'PRESENT')}
-                      className={`p-2 rounded-xl transition-all duration-200 border ${
-                        student.status === 'PRESENT'
-                          ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/35 hover:bg-emerald-500/30'
-                          : 'bg-slate-900/40 text-slate-500 border-slate-800 hover:text-emerald-400 hover:border-emerald-500/30'
-                      } disabled:opacity-50`}
-                      title="Mark Present"
-                    >
-                      <Check className="w-4 h-4" />
-                    </button>
-
-                    {/* Absent/Cross button */}
-                    <button
-                      disabled={updatingId === student.id}
-                      onClick={() => handleMarkAttendance(student.id, 'ABSENT')}
-                      className={`p-2 rounded-xl transition-all duration-200 border ${
-                        student.status === 'ABSENT'
-                          ? 'bg-red-500/20 text-red-400 border-red-500/35 hover:bg-red-500/30'
-                          : 'bg-slate-900/40 text-slate-500 border-slate-800 hover:text-red-400 hover:border-red-500/30'
-                      } disabled:opacity-50`}
-                      title="Mark Absent"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
               ))}

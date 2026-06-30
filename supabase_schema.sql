@@ -235,3 +235,22 @@ CREATE POLICY "Allow authenticated users to insert into documents"
 
 CREATE POLICY "Allow authenticated users to insert into images"
     ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
+
+-- --- ATTENDANCE TABLE & POLICIES ---
+CREATE TABLE IF NOT EXISTS public.attendance (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES public.users(id) ON DELETE CASCADE NOT NULL,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    status TEXT NOT NULL CHECK (status IN ('PRESENT', 'ABSENT')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE (student_id, date)
+);
+
+ALTER TABLE public.attendance ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow select for own attendance or admins on attendance"
+    ON public.attendance FOR SELECT TO authenticated USING (student_id = auth.uid() OR public.is_admin(auth.uid()));
+
+CREATE POLICY "Allow write access for admins on attendance"
+    ON public.attendance FOR ALL TO authenticated USING (public.is_admin(auth.uid()));
+

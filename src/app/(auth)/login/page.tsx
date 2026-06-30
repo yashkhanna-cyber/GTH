@@ -151,13 +151,13 @@ export default function LoginPage() {
             <p className="text-xs text-slate-500 font-medium mb-2 text-center">Demo Accounts</p>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <button
-                onClick={() => setForm({ email: 'admin@gth.edu', password: 'admin123' })}
+                onClick={() => setForm({ email: 'admin@gth.com', password: 'password123' })}
                 className="px-3 py-2 rounded-lg bg-slate-700/30 text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all text-center"
               >
                 Admin
               </button>
               <button
-                onClick={() => setForm({ email: 'student@gth.edu', password: 'student123' })}
+                onClick={() => setForm({ email: 'student1@gth.com', password: 'password123' })}
                 className="px-3 py-2 rounded-lg bg-slate-700/30 text-slate-400 hover:text-white hover:bg-slate-700/50 transition-all text-center"
               >
                 Student

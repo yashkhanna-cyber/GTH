@@ -93,9 +93,7 @@ async function main() {
   // 4. Insert Student Users
   console.log('Creating Student users...')
   const studentsToSeed = [
-    { email: 'student1@gth.com', name: 'Yash Student', enrollment: '22CSE001', team: 'Team Alpha', points: 120 },
-    { email: 'student2@gth.com', name: 'Aryan Dev', enrollment: '22CSE002', team: 'Team Alpha', points: 90 },
-    { email: 'student3@gth.com', name: 'Kabir Malik', enrollment: '22CSE003', team: 'Team Beta', points: 150 }
+    { email: 'student1@gth.com', name: 'Yash Student', enrollment: '22CSE001', team: 'Team Alpha', points: 0 }
   ]
 
   const seededStudents: Record<string, string> = {}
@@ -192,63 +190,6 @@ async function main() {
 
   if (task1Error || task2Error) {
     throw new Error('Failed to insert tasks: ' + (task1Error?.message || task2Error?.message))
-  }
-
-  // 7. Insert some referrals/logs for student 1 referring student 2
-  console.log('Inserting referrals and score history logs...')
-  const referrerId = seededStudents['22CSE001']
-  const newStudentId = seededStudents['22CSE002']
-
-  if (referrerId && newStudentId) {
-    // Record Referral
-    await supabaseAdmin.from('referrals').insert({
-      referrer_student: referrerId,
-      new_student: newStudentId,
-      points_awarded: 10
-    })
-
-    // Record Referral Points History
-    await supabaseAdmin.from('points_history').insert({
-      student_id: referrerId,
-      points: 10,
-      reason: 'Referral bonus: referred Aryan Dev (22CSE002)',
-      given_by: newStudentId
-    })
-
-    // Record normal tasks Points History
-    await supabaseAdmin.from('points_history').insert([
-      {
-        student_id: referrerId,
-        points: 50,
-        reason: 'Task approved: Setup Project and Repository',
-        given_by: authAdmin.user.id
-      },
-      {
-        student_id: seededStudents['22CSE003'],
-        points: 100,
-        reason: 'Task approved: Design Dashboard UI Components',
-        given_by: authAdmin.user.id
-      }
-    ])
-
-    // Record Task Submission
-    await supabaseAdmin.from('task_submissions').insert({
-      student_id: referrerId,
-      task_id: task1.id,
-      uploaded_file: 'https://github.com/yash/techverse-setup',
-      comment: 'Here is the setup repository link. Ready for review.',
-      status: 'APPROVED',
-      points_awarded: 50,
-      review_comment: 'Excellent file structure and documentation!'
-    })
-
-    // Create Notification
-    await supabaseAdmin.from('notifications').insert({
-      student_id: referrerId,
-      title: 'Task Approved!',
-      message: 'Your submission for task "Setup Project and Repository" has been approved. You earned 50 points.',
-      is_read: false
-    })
   }
 
   console.log('Database seeding completed successfully!')

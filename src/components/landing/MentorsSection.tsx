@@ -34,7 +34,7 @@ const mentors = [
     role: 'Full-Stack & Cloud Architect',
     bio: 'AWS Solutions Architect. Open source contributor. 10+ years building scalable apps.',
     specialties: ['React', 'Node.js', 'AWS', 'DevOps'],
-    gradient: 'from-orange-500 to-red-500',
+    gradient: 'from-red-500 to-red-500',
     initial: 'VS',
   },
 ]
@@ -57,7 +57,7 @@ export default function MentorsSection() {
 
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="text-orange-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Expert Guidance</span>
+          <span className="text-red-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Expert Guidance</span>
           <h2 className="section-title text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>
             Meet Our{' '}<span className="gradient-text">Mentors</span>
           </h2>
@@ -85,7 +85,7 @@ export default function MentorsSection() {
               <h3 className="text-white font-bold text-lg mb-0.5" style={{ fontFamily: 'var(--font-display)' }}>
                 {mentor.name}
               </h3>
-              <p className="text-orange-400 text-xs font-semibold mb-3">{mentor.role}</p>
+              <p className="text-red-400 text-xs font-semibold mb-3">{mentor.role}</p>
               <p className="text-sm text-slate-400 leading-relaxed mb-4">{mentor.bio}</p>
 
               <div className="flex flex-wrap justify-center gap-1.5 mb-4">

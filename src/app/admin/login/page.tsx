@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react'
+import { Shield, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react'
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -30,12 +30,14 @@ export default function LoginPage() {
         return
       }
 
-      // Redirect based on role
-      if (data.user.role === 'ADMIN') {
-        router.push('/admin')
-      } else {
-        router.push('/dashboard')
+      // Restrict to ADMIN role only
+      if (data.user.role !== 'ADMIN') {
+        setError('Access denied: Student accounts cannot log in here.')
+        await fetch('/api/auth/logout', { method: 'POST' })
+        return
       }
+
+      router.push('/admin')
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -60,19 +62,19 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20">
-                <Sparkles className="w-6 h-6 text-white" />
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20 group-hover:shadow-red-500/30 transition-all">
+                <Shield className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
+                <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH Admin</span>
+                <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">Control Panel</span>
               </div>
             </Link>
             <h1 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-              Welcome Back
+              Admin Portal
             </h1>
-            <p className="text-slate-400 text-sm">Sign in to access your dashboard</p>
+            <p className="text-slate-400 text-sm">Admin credentials required</p>
           </div>
 
           {/* Form Card */}
@@ -85,7 +87,7 @@ export default function LoginPage() {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Admin Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-500" />
                   <input
@@ -93,7 +95,7 @@ export default function LoginPage() {
                     required
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    placeholder="you@example.com"
+                    placeholder="admin@gth.com"
                     className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm"
                   />
                 </div>
@@ -108,7 +110,7 @@ export default function LoginPage() {
                     required
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    placeholder="Enter your password"
+                    placeholder="••••••••"
                     className="w-full pl-11 pr-12 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm"
                   />
                   <button
@@ -130,22 +132,16 @@ export default function LoginPage() {
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    Sign In <ArrowRight className="w-4 h-4" />
+                    Sign In as Admin <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="mt-6 text-center space-y-3">
-              <p className="text-sm text-slate-400">
-                Don&apos;t have an account?{' '}
-                <Link href="/register" className="text-red-400 font-semibold hover:text-red-300 transition-colors">
-                  Register
-                </Link>
-              </p>
+            <div className="mt-6 text-center">
               <div className="pt-2 border-t border-slate-700/30">
-                <Link href="/admin/login" className="text-[10px] text-slate-500 hover:text-red-400 transition-colors">
-                  Are you an Admin? Admin Login →
+                <Link href="/login" className="text-xs text-slate-500 hover:text-red-400 transition-colors">
+                  Are you a Student? Student Login →
                 </Link>
               </div>
             </div>

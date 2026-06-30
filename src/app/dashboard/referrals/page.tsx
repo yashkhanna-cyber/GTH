@@ -46,7 +46,7 @@ export default function StudentReferralsPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         <p className="text-slate-400 text-sm">Loading referrals history...</p>
       </div>
     )
@@ -57,7 +57,7 @@ export default function StudentReferralsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2.5" style={{ fontFamily: 'var(--font-display)' }}>
-          <Share2 className="w-6 h-6 text-orange-400" />
+          <Share2 className="w-6 h-6 text-red-400" />
           Referrals Program
         </h1>
         <p className="text-sm text-slate-400 mt-1">Invite your friends to GTH TechVerse 2026 and earn points when they register.</p>
@@ -81,7 +81,7 @@ export default function StudentReferralsPage() {
             <button
               onClick={copyToClipboard}
               disabled={!referralCode}
-              className="px-4 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm transition-all flex items-center gap-2 shadow-md shadow-orange-500/10 shrink-0"
+              className="px-4 py-3 rounded-xl bg-red-500 hover:bg-red-700 text-white font-semibold text-sm transition-all flex items-center gap-2 shadow-md shadow-red-500/10 shrink-0"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Copied' : 'Copy'}
@@ -92,8 +92,8 @@ export default function StudentReferralsPage() {
         {/* Stats Card */}
         <div className="grid grid-rows-2 gap-4">
           <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-5 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-              <Users className="w-5 h-5 text-orange-400" />
+            <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
+              <Users className="w-5 h-5 text-red-400" />
             </div>
             <div>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Total Referrals</p>

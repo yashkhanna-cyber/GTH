@@ -16,12 +16,12 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
                 <span className="text-white font-bold text-lg block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-orange-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
+                <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-5">
@@ -42,7 +42,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {['About', 'Projects', 'Prizes', 'Register'].map((link) => (
                 <li key={link}>
-                  <a href={link === 'Register' ? '/register' : `#${link.toLowerCase()}`} className="text-sm text-slate-400 hover:text-orange-400 transition-colors">
+                  <a href={link === 'Register' ? '/register' : `#${link.toLowerCase()}`} className="text-sm text-slate-400 hover:text-red-400 transition-colors">
                     {link}
                   </a>
                 </li>
@@ -62,7 +62,7 @@ export default function Footer() {
                 { name: 'Admin Panel', href: '/admin' },
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-sm text-slate-400 hover:text-orange-400 transition-colors">
+                  <Link href={link.href} className="text-sm text-slate-400 hover:text-red-400 transition-colors">
                     {link.name}
                   </Link>
                 </li>
@@ -75,16 +75,16 @@ export default function Footer() {
             <h3 className="text-white font-semibold text-sm mb-4" style={{ fontFamily: 'var(--font-display)' }}>Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-orange-400 mt-0.5 shrink-0" />
+                <MapPin className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
                 <span className="text-sm text-slate-400">Geeta University, Panipat, Haryana, India</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-orange-400 shrink-0" />
-                <a href="mailto:gth@geeta.edu.in" className="text-sm text-slate-400 hover:text-orange-400 transition-colors">gth@geeta.edu.in</a>
+                <Mail className="w-4 h-4 text-red-400 shrink-0" />
+                <a href="mailto:gth@geeta.edu.in" className="text-sm text-slate-400 hover:text-red-400 transition-colors">gth@geeta.edu.in</a>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-orange-400 shrink-0" />
-                <a href="tel:+919876543210" className="text-sm text-slate-400 hover:text-orange-400 transition-colors">+91 98765 43210</a>
+                <Phone className="w-4 h-4 text-red-400 shrink-0" />
+                <a href="tel:+919876543210" className="text-sm text-slate-400 hover:text-red-400 transition-colors">+91 98765 43210</a>
               </li>
             </ul>
           </div>

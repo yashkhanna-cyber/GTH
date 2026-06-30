@@ -37,7 +37,7 @@ export default function StudentsAdmin() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         <p className="text-slate-400 text-sm">Loading students list...</p>
       </div>
     )
@@ -47,11 +47,11 @@ export default function StudentsAdmin() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
-          <Users className="w-6 h-6 inline mr-2 text-orange-400" /> Students
+          <Users className="w-6 h-6 inline mr-2 text-red-400" /> Students
         </h1>
         <div className="flex gap-2">
           <button className="px-4 py-2 rounded-xl bg-slate-800/50 text-slate-400 text-sm flex items-center gap-1.5 hover:text-white"><Download className="w-3.5 h-3.5" /> Export</button>
-          <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm flex items-center gap-1.5 font-semibold"><Plus className="w-3.5 h-3.5" /> Add</button>
+          <button className="px-4 py-2 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white text-sm flex items-center gap-1.5 font-semibold"><Plus className="w-3.5 h-3.5" /> Add</button>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ export default function StudentsAdmin() {
                 <tr key={s.id} className="border-b border-slate-700/20 hover:bg-slate-700/10 transition-all cursor-pointer">
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
                         {s.name.split(' ').map(n => n[0]).join('')}
                       </div>
                       <div>
@@ -94,7 +94,7 @@ export default function StudentsAdmin() {
                   </td>
                   <td className="px-5 py-3.5 text-sm text-slate-400">{s.branch}</td>
                   <td className="px-5 py-3.5 text-sm text-slate-400">{s.team}</td>
-                  <td className="px-5 py-3.5 text-right text-sm text-orange-400 font-bold font-mono">{s.points} XP</td>
+                  <td className="px-5 py-3.5 text-right text-sm text-red-400 font-bold font-mono">{s.points} XP</td>
                 </tr>
               ))
             )}

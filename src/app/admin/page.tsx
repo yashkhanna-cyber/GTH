@@ -52,7 +52,7 @@ export default function AdminOverview() {
 
   const statCards = stats ? [
     { label: 'Total Students', value: stats.totalStudents.toString(), icon: Users, color: 'from-blue-500 to-indigo-500', change: 'Total enrolled' },
-    { label: 'Active Teams', value: stats.activeTeams.toString(), icon: Trophy, color: 'from-orange-500 to-amber-500', change: 'Teams formed' },
+    { label: 'Active Teams', value: stats.activeTeams.toString(), icon: Trophy, color: 'from-red-500 to-amber-500', change: 'Teams formed' },
     { label: 'Submissions', value: stats.submissions.toString(), icon: FileCheck, color: 'from-emerald-500 to-green-500', change: 'Files uploaded' },
     { label: 'Active Challenges', value: stats.activeChallenges.toString(), icon: Zap, color: 'from-purple-500 to-indigo-500', change: 'Bootcamp tasks' },
     { label: 'Total Points Given', value: stats.totalPoints.toLocaleString(), icon: BarChart3, color: 'from-cyan-500 to-blue-500', change: 'Distributed XP' },
@@ -86,7 +86,7 @@ export default function AdminOverview() {
         <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>Recent Submissions</h2>
-            <Link href="/admin/projects" className="text-xs text-orange-400 hover:text-orange-300 font-medium">View All</Link>
+            <Link href="/admin/projects" className="text-xs text-red-400 hover:text-red-300 font-medium">View All</Link>
           </div>
           <div className="space-y-3">
             {recentSubmissions.length === 0 ? (
@@ -94,7 +94,7 @@ export default function AdminOverview() {
             ) : (
               recentSubmissions.map((s, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-700/20 transition-all">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
                     {s.student.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ export default function AdminOverview() {
           <h2 className="text-lg font-bold text-white mb-5" style={{ fontFamily: 'var(--font-display)' }}>Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Add Points', href: '/admin/points', icon: Trophy, color: 'from-orange-500 to-amber-500' },
+              { label: 'Add Points', href: '/admin/points', icon: Trophy, color: 'from-red-500 to-amber-500' },
               { label: 'Review Submissions', href: '/admin/tasks', icon: FileCheck, color: 'from-emerald-500 to-green-500' },
               { label: 'Mark Attendance', href: '/admin/attendance', icon: Clock, color: 'from-blue-500 to-indigo-500' },
               { label: 'Announcements', href: '/admin/announcements', icon: Zap, color: 'from-purple-500 to-indigo-500' },

@@ -296,7 +296,7 @@ export default function AdminTasksPage() {
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-red-500/20 transition-all w-full sm:w-auto"
+            className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-red-500/20 transition-all w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             Add Task
@@ -415,7 +415,7 @@ export default function AdminTasksPage() {
                     PENDING: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
                     APPROVED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
                     REJECTED: 'bg-red-500/10 text-red-400 border-red-500/20',
-                    CHANGES_REQUESTED: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+                    CHANGES_REQUESTED: 'bg-red-500/10 text-red-400 border-red-500/20',
                   }
                   return (
                     <div
@@ -590,7 +590,7 @@ export default function AdminTasksPage() {
                     <button
                       type="submit"
                       disabled={reviewing}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                     >
                       {reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save Grade and Review'}
                     </button>
@@ -769,7 +769,7 @@ export default function AdminTasksPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 font-bold"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 font-bold"
               >
                 {submitting ? 'Creating Task...' : 'Create Task'}
               </button>

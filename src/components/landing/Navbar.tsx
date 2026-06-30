@@ -32,14 +32,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-all">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20 group-hover:shadow-red-500/40 transition-all">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div className="flex flex-col">
             <span className="text-white font-bold text-lg leading-tight tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
               GTH TechVerse
             </span>
-            <span className="text-orange-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">
+            <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">
               2026
             </span>
           </div>
@@ -68,7 +68,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/register"
-            className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl transition-all hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-0.5"
+            className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-xl transition-all hover:shadow-lg hover:shadow-red-500/25 hover:-translate-y-0.5"
           >
             Register Now
           </Link>
@@ -102,7 +102,7 @@ export default function Navbar() {
               <Link href="/login" className="flex-1 px-5 py-3 text-center text-sm font-semibold text-white border border-white/15 rounded-xl hover:bg-white/5">
                 Login
               </Link>
-              <Link href="/register" className="flex-1 px-5 py-3 text-center text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl">
+              <Link href="/register" className="flex-1 px-5 py-3 text-center text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 rounded-xl">
                 Register
               </Link>
             </div>

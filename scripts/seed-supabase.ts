@@ -63,7 +63,7 @@ async function main() {
 
   // 3. Insert Admin User
   console.log('Creating Admin Auth user...')
-  const adminEmail = 'yash.2201301063@geetauniversity.edu.in'
+  const adminEmail = 'yash.khanna@geetauniversity.edu.in'
   const { data: authAdmin, error: adminAuthError } = await supabaseAdmin.auth.admin.createUser({
     email: adminEmail,
     password: 'Y1a2s3h4',
@@ -92,9 +92,17 @@ async function main() {
 
   // 4. Insert Student Users
   console.log('Creating Student users...')
-  const studentsToSeed = [
-    { email: 'student1@gth.com', name: 'Yash Student', enrollment: '22CSE001', team: 'Team Alpha', points: 0 }
-  ]
+  const studentsToSeed = Array.from({ length: 10 }, (_, i) => {
+    const num = i + 1
+    const padNum = String(num).padStart(3, '0')
+    return {
+      email: `student${num}@gth.com`,
+      name: `Student ${num}`,
+      enrollment: `22CSE${padNum}`,
+      team: num <= 5 ? 'Team Alpha' : 'Team Beta',
+      points: 10 * num
+    }
+  })
 
   const seededStudents: Record<string, string> = {}
 
@@ -125,7 +133,7 @@ async function main() {
       year: 3,
       batch: 'Batch A',
       total_points: s.points,
-      bio: 'Enthusiastic full-stack developer eager to learn IoT and AI.',
+      bio: `Enthusiastic full-stack developer (Student ${s.email.split('@')[0]}) eager to learn IoT and AI.`,
       skills: 'React, Tailwind CSS, TypeScript, Node.js'
     })
 

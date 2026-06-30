@@ -80,7 +80,7 @@ export default function NotificationsPage() {
           <button
             onClick={handleMarkAllRead}
             disabled={marking}
-            className="text-xs font-semibold bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 border border-orange-500/20 px-3 py-1.5 rounded-xl flex items-center gap-1.5 self-start sm:self-center transition-all disabled:opacity-50"
+            className="text-xs font-semibold bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 border border-red-500/20 px-3 py-1.5 rounded-xl flex items-center gap-1.5 self-start sm:self-center transition-all disabled:opacity-50"
           >
             <Check className="w-3.5 h-3.5" /> Mark all as read
           </button>
@@ -115,7 +115,7 @@ export default function NotificationsPage() {
                 className={`rounded-xl border p-5 flex items-start gap-4 transition-all ${
                   n.read
                     ? 'bg-slate-800/20 border-slate-700/40 opacity-75'
-                    : 'bg-orange-500/5 border-orange-500/20 shadow-sm shadow-orange-500/5'
+                    : 'bg-red-500/5 border-red-500/20 shadow-sm shadow-red-500/5'
                 }`}
               >
                 <Icon className={`w-5 h-5 ${config.color} mt-0.5 shrink-0`} />
@@ -126,7 +126,7 @@ export default function NotificationsPage() {
                     <div className="mt-3">
                       <a
                         href="/dashboard/team"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-orange-500/10"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-500 hover:bg-red-700 text-white font-bold text-xs rounded-xl transition-all shadow-md shadow-red-500/10"
                       >
                         <Users className="w-3.5 h-3.5" /> View Invitation & Join
                       </a>
@@ -135,7 +135,7 @@ export default function NotificationsPage() {
                   <p className="text-[10px] text-slate-500 mt-2 font-mono">{n.time}</p>
                 </div>
                 {!n.read && (
-                  <div className="w-2 h-2 rounded-full bg-orange-500 mt-2 shrink-0 animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-red-500 mt-2 shrink-0 animate-pulse" />
                 )}
               </div>
             )

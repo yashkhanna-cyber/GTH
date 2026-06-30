@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Users, Trophy, FolderKanban, FileCheck, Zap,
   CalendarCheck, UserCog, Megaphone, BadgeCheck, Share2, BarChart3,
-  Settings, ScrollText, Menu, X, LogOut, Sparkles, ChevronRight, Shield,
+  Settings, ScrollText, Menu, X, LogOut, ChevronRight, Shield,
   ClipboardList
 } from 'lucide-react'
 
@@ -32,14 +32,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
+    if (pathname === '/admin/login') return
     fetch('/api/auth/me').then(r => r.json()).then(data => {
-      if (data.error || data.user?.role !== 'ADMIN') router.push('/login')
-    }).catch(() => router.push('/login'))
-  }, [router])
+      if (data.error || data.user?.role !== 'ADMIN') router.push('/admin/login')
+    }).catch(() => router.push('/admin/login'))
+  }, [router, pathname])
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
-    router.push('/login')
+    router.push('/admin/login')
+  }
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>
   }
 
   return (
@@ -51,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }`}>
         <div className="p-5 flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
               <Shield className="w-4.5 h-4.5 text-white" />
             </div>
             <div>
@@ -59,7 +64,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="text-red-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Control Panel</span>
             </div>
           </Link>
-          <button className="lg:hidden" onClick={() => setSidebarOpen(false)}><X className="w-5 h-5 text-slate-400" /></button>
+          <button className="lg:hidden text-slate-400 p-1" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar"><X className="w-5 h-5" /></button>
         </div>
 
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
@@ -78,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         <div className="p-3 border-t border-slate-800/50">
-          <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all">
+          <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer">
             <LogOut className="w-4.5 h-4.5" /> Logout
           </button>
         </div>
@@ -86,10 +91,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="flex-1 flex flex-col min-h-screen">
         <header className="sticky top-0 z-30 px-6 py-4 flex items-center justify-between bg-[#0f172a]/80 backdrop-blur-xl border-b border-slate-800/50">
-          <button className="lg:hidden" onClick={() => setSidebarOpen(true)}><Menu className="w-5 h-5 text-slate-400" /></button>
+          <button className="lg:hidden text-slate-400 p-1" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar"><Menu className="w-5 h-5" /></button>
           <div />
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">AD</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold">AD</div>
             <div className="hidden sm:block"><p className="text-sm font-semibold text-white">Admin</p><p className="text-xs text-slate-500">Super Admin</p></div>
           </div>
         </header>

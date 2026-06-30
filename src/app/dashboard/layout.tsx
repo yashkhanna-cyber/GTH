@@ -6,7 +6,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, User, Users, Trophy, FolderKanban, FileCheck, Upload,
   Zap, ClipboardList, CalendarCheck, Award, Share2, BadgeCheck, Bell,
-  Calendar, BarChart3, Menu, X, LogOut, Sparkles, ChevronRight, Search, Moon, Sun
+  Calendar, BarChart3, Menu, X, LogOut, Sparkles, ChevronRight, Search,
+  Sun, Moon
 } from 'lucide-react'
 
 interface UserData {
@@ -62,7 +63,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
       <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center animate-pulse">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center animate-pulse">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <p className="text-slate-400 text-sm">Loading dashboard...</p>
@@ -86,12 +87,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Logo */}
           <div className="p-5 flex items-center justify-between">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
                 <Sparkles className="w-4.5 h-4.5 text-white" />
               </div>
               <div>
                 <span className={`font-bold text-sm block leading-tight ${darkMode ? 'text-white' : 'text-slate-900'}`} style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-orange-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Student</span>
+                <span className="text-red-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Student</span>
               </div>
             </Link>
             <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
@@ -110,7 +111,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     active
-                      ? `${darkMode ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}`
+                      ? `${darkMode ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-600'}`
                       : `${darkMode ? 'text-slate-400 hover:text-white hover:bg-slate-800/50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`
                   }`}
                 >
@@ -124,7 +125,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Bottom */}
           <div className={`p-3 border-t ${darkMode ? 'border-slate-800/50' : 'border-slate-200'}`}>
-            <button onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full transition-all ${
+            <button onClick={handleLogout} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full transition-all cursor-pointer ${
               darkMode ? 'text-slate-400 hover:text-red-400 hover:bg-red-500/10' : 'text-slate-500 hover:text-red-600 hover:bg-red-50'
             }`}>
               <LogOut className="w-4.5 h-4.5" />
@@ -160,11 +161,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 darkMode ? 'bg-slate-800/50 text-slate-400 hover:text-white' : 'bg-slate-100 text-slate-500 hover:text-slate-900'
               }`}>
                 <Bell className="w-4 h-4" />
-                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-orange-500 rounded-full border-2 border-[#0f172a]" />
+                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-red-500 rounded-full border-2 border-[#0f172a]" />
               </Link>
 
               <div className="flex items-center gap-2.5 pl-2">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold">
                   {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
                 </div>
                 <div className="hidden sm:block">

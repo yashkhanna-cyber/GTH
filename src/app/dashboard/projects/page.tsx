@@ -51,7 +51,7 @@ export default function StudentProjectsPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         <p className="text-slate-400 text-sm">Loading projects...</p>
       </div>
     )
@@ -81,7 +81,7 @@ export default function StudentProjectsPage() {
             </a>
             <button
               onClick={enterFullscreen}
-              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-all shadow-md shadow-orange-500/10"
+              className="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-all shadow-md shadow-red-500/10"
             >
               <Maximize2 className="w-3.5 h-3.5" />
               Fullscreen
@@ -92,7 +92,7 @@ export default function StudentProjectsPage() {
         {/* Project details card */}
         <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-6">
           <div className="flex flex-wrap items-center gap-3 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase tracking-wider">
               Assigned
             </span>
             <span className="text-xs text-slate-500 flex items-center gap-1">
@@ -140,7 +140,7 @@ export default function StudentProjectsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2.5" style={{ fontFamily: 'var(--font-display)' }}>
-          <FolderKanban className="w-6 h-6 text-orange-400" />
+          <FolderKanban className="w-6 h-6 text-red-400" />
           Project Instructions
         </h1>
         <p className="text-sm text-slate-400 mt-1">Read instruction PDFs and build your assigned projects step-by-step.</p>
@@ -148,8 +148,8 @@ export default function StudentProjectsPage() {
 
       {projects.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700/80 bg-slate-900/10 p-16 text-center max-w-xl mx-auto my-12">
-          <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center mb-6 mx-auto">
-            <FileText className="w-8 h-8 text-orange-400" />
+          <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6 mx-auto">
+            <FileText className="w-8 h-8 text-red-400" />
           </div>
           <h3 className="text-white font-bold text-lg mb-2" style={{ fontFamily: 'var(--font-display)' }}>
             No Projects Assigned Yet
@@ -167,7 +167,7 @@ export default function StudentProjectsPage() {
             >
               <div>
                 <div className="flex items-center justify-between gap-3 mb-4">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 uppercase tracking-wider">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20 uppercase tracking-wider">
                     Assigned
                   </span>
                   <span className="text-[10px] text-slate-500 flex items-center gap-1 font-medium">
@@ -176,7 +176,7 @@ export default function StudentProjectsPage() {
                   </span>
                 </div>
                 
-                <h3 className="text-white font-bold text-lg group-hover:text-orange-400 transition-colors mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+                <h3 className="text-white font-bold text-lg group-hover:text-red-400 transition-colors mb-2" style={{ fontFamily: 'var(--font-display)' }}>
                   {project.name}
                 </h3>
                 <p className="text-slate-400 text-sm leading-relaxed line-clamp-3 mb-6">
@@ -186,7 +186,7 @@ export default function StudentProjectsPage() {
 
               <button
                 onClick={() => setActiveProject(project)}
-                className="w-full py-3 bg-slate-700/40 hover:bg-orange-500 text-slate-200 hover:text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 border border-slate-600/30 hover:border-orange-400 transition-all"
+                className="w-full py-3 bg-slate-700/40 hover:bg-red-500 text-slate-200 hover:text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 border border-slate-600/30 hover:border-red-400 transition-all"
               >
                 <FileText className="w-4 h-4" />
                 Open Project

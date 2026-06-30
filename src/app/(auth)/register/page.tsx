@@ -51,7 +51,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex gradient-hero relative overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-orange-500/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-red-500/8 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 w-full flex items-center justify-center p-6">
@@ -59,12 +59,12 @@ export default function RegisterPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-lg shadow-red-500/20">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
                 <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-orange-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
+                <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
               </div>
             </Link>
             <h1 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
@@ -78,11 +78,11 @@ export default function RegisterPage() {
             {[1, 2, 3].map((s) => (
               <div key={s} className="flex items-center gap-2">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                  step >= s ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white' : 'bg-slate-700/50 text-slate-500'
+                  step >= s ? 'bg-gradient-to-r from-red-500 to-red-700 text-white' : 'bg-slate-700/50 text-slate-500'
                 }`}>
                   {s}
                 </div>
-                {s < 3 && <div className={`w-8 h-0.5 rounded-full transition-all ${step > s ? 'bg-orange-500' : 'bg-slate-700/50'}`} />}
+                {s < 3 && <div className={`w-8 h-0.5 rounded-full transition-all ${step > s ? 'bg-red-500' : 'bg-slate-700/50'}`} />}
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="text" required value={form.name} onChange={e => updateForm('name', e.target.value)} placeholder="John Doe"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                   <div>
@@ -112,7 +112,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="email" required value={form.email} onChange={e => updateForm('email', e.target.value)} placeholder="you@example.com"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                   <div>
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="tel" value={form.phone} onChange={e => updateForm('phone', e.target.value)} placeholder="+91 98765 43210"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                 </>
@@ -134,7 +134,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="text" required value={form.enrollmentNo} onChange={e => updateForm('enrollmentNo', e.target.value)} placeholder="22CSE001"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                   <div>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Building className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <select required value={form.department} onChange={e => updateForm('department', e.target.value)}
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm appearance-none">
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm appearance-none">
                         <option value="">Select Department</option>
                         {departments.map(d => <option key={d} value={d}>{d}</option>)}
                       </select>
@@ -154,7 +154,7 @@ export default function RegisterPage() {
                       <div className="relative">
                         <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <select required value={form.branch} onChange={e => updateForm('branch', e.target.value)}
-                          className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm appearance-none">
+                          className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm appearance-none">
                           <option value="">Branch</option>
                           {branches.map(b => <option key={b} value={b}>{b}</option>)}
                         </select>
@@ -165,7 +165,7 @@ export default function RegisterPage() {
                       <div className="relative">
                         <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <select required value={form.year} onChange={e => updateForm('year', e.target.value)}
-                          className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm appearance-none">
+                          className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm appearance-none">
                           {[1, 2, 3, 4].map(y => <option key={y} value={y}>Year {y}</option>)}
                         </select>
                       </div>
@@ -182,7 +182,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Sparkles className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="text" value={form.referralCode} onChange={e => updateForm('referralCode', e.target.value)} placeholder="e.g. GTH-22CSE001"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                   <div>
@@ -190,7 +190,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type={showPassword ? 'text' : 'password'} required value={form.password} onChange={e => updateForm('password', e.target.value)} placeholder="Min 6 characters"
-                        className="w-full pl-11 pr-12 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-12 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                       <button type="button" onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -202,7 +202,7 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                       <input type="password" required value={form.confirmPassword} onChange={e => updateForm('confirmPassword', e.target.value)} placeholder="Re-enter password"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all text-sm" />
+                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
                     </div>
                   </div>
                 </>
@@ -216,7 +216,7 @@ export default function RegisterPage() {
                   </button>
                 )}
                 <button type="submit" disabled={loading}
-                  className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-60">
+                  className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-red-500/25 transition-all disabled:opacity-60">
                   {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                     <>{step < 3 ? 'Continue' : 'Create Account'} <ArrowRight className="w-4 h-4" /></>
                   )}
@@ -227,7 +227,7 @@ export default function RegisterPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-slate-400">
                 Already have an account?{' '}
-                <Link href="/login" className="text-orange-400 font-semibold hover:text-orange-300">Sign In</Link>
+                <Link href="/login" className="text-red-400 font-semibold hover:text-red-300">Sign In</Link>
               </p>
             </div>
           </div>

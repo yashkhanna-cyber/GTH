@@ -11,7 +11,7 @@ const projects = [
     difficulty: 'MEDIUM',
     tags: ['ESP32', 'OpenCV', 'Python', 'IoT'],
     icon: Cpu,
-    gradient: 'from-orange-500 to-red-500',
+    gradient: 'from-red-500 to-red-500',
     day: 1,
   },
   {
@@ -46,7 +46,7 @@ const projects = [
 const difficultyColors: Record<string, string> = {
   EASY: 'bg-green-500/15 text-green-400',
   MEDIUM: 'bg-yellow-500/15 text-yellow-400',
-  HARD: 'bg-orange-500/15 text-orange-400',
+  HARD: 'bg-red-500/15 text-red-400',
   EXPERT: 'bg-red-500/15 text-red-400',
 }
 
@@ -64,11 +64,11 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" ref={ref} className="relative py-24 sm:py-32 bg-[#0b1120]">
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-[150px]" />
+      <div className="absolute top-1/2 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-[150px]" />
 
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="text-orange-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Build & Ship</span>
+          <span className="text-red-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Build & Ship</span>
           <h2 className="section-title text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>
             Featured{' '}<span className="gradient-text">Projects</span>
           </h2>
@@ -123,10 +123,10 @@ export default function ProjectsSection() {
                 </div>
 
                 <div className="flex gap-3">
-                  <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-orange-400 transition-colors font-medium">
+                  <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-400 transition-colors font-medium">
                     <ExternalLink className="w-3.5 h-3.5" /> View Details
                   </button>
-                  <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-orange-400 transition-colors font-medium">
+                  <button className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-400 transition-colors font-medium">
                     <Github className="w-3.5 h-3.5" /> Starter Code
                   </button>
                 </div>

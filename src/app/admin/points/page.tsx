@@ -129,7 +129,7 @@ export default function PointsAdmin() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         <p className="text-slate-400 text-sm">Loading points system...</p>
       </div>
     )
@@ -138,7 +138,7 @@ export default function PointsAdmin() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-        <Trophy className="w-6 h-6 text-orange-400" /> Points Management
+        <Trophy className="w-6 h-6 text-red-400" /> Points Management
       </h1>
 
       <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-6">
@@ -172,7 +172,7 @@ export default function PointsAdmin() {
                   onFocus={() => setShowSuggestions(true)}
                   onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   onChange={e => setStudentSearch(e.target.value)}
-                  className="w-full pl-11 pr-10 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 text-sm disabled:opacity-60"
+                  className="w-full pl-11 pr-10 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 text-sm disabled:opacity-60"
                 />
                 {selectedStudent && (
                   <button
@@ -212,7 +212,7 @@ export default function PointsAdmin() {
                 placeholder="e.g. 50 (negative to deduct)"
                 value={form.points}
                 onChange={e => setForm({ ...form, points: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 text-sm"
+                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 text-sm"
               />
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function PointsAdmin() {
               <select
                 value={form.category}
                 onChange={e => setForm({ ...form, category: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white text-sm focus:outline-none focus:border-orange-500 appearance-none"
+                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white text-sm focus:outline-none focus:border-red-500 appearance-none"
               >
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -235,7 +235,7 @@ export default function PointsAdmin() {
                 placeholder="Remarks / Award justification..."
                 value={form.reason}
                 onChange={e => setForm({ ...form, reason: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 text-sm"
+                className="w-full px-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 text-sm"
               />
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function PointsAdmin() {
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-orange-500/20 disabled:opacity-60 transition-all"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-red-500/20 disabled:opacity-60 transition-all"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             Award Points

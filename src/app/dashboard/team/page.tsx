@@ -184,7 +184,7 @@ export default function TeamPage() {
   if (loading) {
     return (
       <div className="py-32 text-center text-slate-500 text-sm flex flex-col items-center justify-center gap-2">
-        <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-red-500" />
         <span>Syncing team data...</span>
       </div>
     )
@@ -195,7 +195,7 @@ export default function TeamPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-          <Users className="w-6 h-6 text-orange-500" />
+          <Users className="w-6 h-6 text-red-500" />
           My Team Dashboard
         </h1>
       </div>
@@ -220,11 +220,11 @@ export default function TeamPage() {
         // ==========================================
         <div className="space-y-6">
           {/* Team Banner */}
-          <div className="rounded-2xl bg-gradient-to-r from-orange-600/10 via-amber-500/10 to-indigo-600/5 border border-slate-700/50 p-6 sm:p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none" />
+          <div className="rounded-2xl bg-gradient-to-r from-red-700/10 via-amber-500/10 to-indigo-600/5 border border-slate-700/50 p-6 sm:p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[80px] pointer-events-none" />
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 relative z-10">
               <div>
-                <span className="text-[10px] text-orange-400 font-bold uppercase tracking-[0.2em] bg-orange-500/10 px-2.5 py-1 rounded-md border border-orange-500/10">Active Team</span>
+                <span className="text-[10px] text-red-400 font-bold uppercase tracking-[0.2em] bg-red-500/10 px-2.5 py-1 rounded-md border border-red-500/10">Active Team</span>
                 <h2 className="text-3xl font-black text-white mt-3" style={{ fontFamily: 'var(--font-display)' }}>{teamInfo.name}</h2>
                 <p className="text-slate-400 text-sm mt-1.5 italic">"{teamInfo.tagline}"</p>
                 {teamInfo.mentor ? (
@@ -238,7 +238,7 @@ export default function TeamPage() {
               <div className="flex gap-4 md:text-right">
                 <div className="bg-slate-800/40 border border-slate-700/40 p-4 rounded-xl shrink-0">
                   <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Total Points</p>
-                  <p className="text-2xl font-black text-orange-400 mt-1 font-mono">{teamInfo.totalPoints.toLocaleString()}</p>
+                  <p className="text-2xl font-black text-red-400 mt-1 font-mono">{teamInfo.totalPoints.toLocaleString()}</p>
                 </div>
                 <div className="bg-slate-800/40 border border-slate-700/40 p-4 rounded-xl shrink-0">
                   <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Team Rank</p>
@@ -257,7 +257,7 @@ export default function TeamPage() {
                   {m.photo ? (
                     <img src={m.photo} alt={m.name} className="w-10 h-10 rounded-full object-cover border border-slate-700" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500/20 to-amber-600/20 border border-orange-500/10 flex items-center justify-center text-orange-400 text-sm font-bold uppercase">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500/20 to-amber-600/20 border border-red-500/10 flex items-center justify-center text-red-400 text-sm font-bold uppercase">
                       {m.name.substring(0, 2)}
                     </div>
                   )}
@@ -279,7 +279,7 @@ export default function TeamPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-orange-400 font-bold font-mono">{m.points.toLocaleString()}</p>
+                    <p className="text-sm text-red-400 font-bold font-mono">{m.points.toLocaleString()}</p>
                     <p className="text-[10px] text-slate-500">points</p>
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export default function TeamPage() {
           <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-6 space-y-5">
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-                <Sparkles className="w-5 h-5 text-orange-400" />
+                <Sparkles className="w-5 h-5 text-red-400" />
                 Create New Team
               </h2>
               <p className="text-xs text-slate-400 mt-1">Form a team with other registered students (min 3, max 5 members).</p>
@@ -319,7 +319,7 @@ export default function TeamPage() {
                   placeholder="e.g. Code Knights"
                   value={teamName}
                   onChange={e => setTeamName(e.target.value)}
-                  className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-orange-500/40 transition-colors"
+                  className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-red-500/40 transition-colors"
                 />
               </div>
 
@@ -331,7 +331,7 @@ export default function TeamPage() {
                   placeholder="e.g. Crafting future solutions with code"
                   value={tagline}
                   onChange={e => setTagline(e.target.value)}
-                  className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-orange-500/40 transition-colors"
+                  className="w-full bg-slate-900/40 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-red-500/40 transition-colors"
                 />
               </div>
 
@@ -350,7 +350,7 @@ export default function TeamPage() {
                     placeholder="Search unassigned students..."
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-900/60 border border-slate-750 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-orange-500/30 transition-colors"
+                    className="w-full bg-slate-900/60 border border-slate-750 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-red-500/30 transition-colors"
                   />
                 </div>
 
@@ -369,7 +369,7 @@ export default function TeamPage() {
                           onClick={() => toggleSelectMember(s.id)}
                           className={`flex items-center justify-between p-2.5 rounded-lg cursor-pointer transition-all ${
                             isSelected 
-                              ? 'bg-orange-500/10 border border-orange-500/20 text-white' 
+                              ? 'bg-red-500/10 border border-red-500/20 text-white' 
                               : 'hover:bg-slate-800/40 border border-transparent text-slate-300'
                           }`}
                         >
@@ -380,7 +380,7 @@ export default function TeamPage() {
                             </p>
                           </div>
                           <div className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${
-                            isSelected ? 'bg-orange-500 border-orange-500 text-white' : 'border-slate-700'
+                            isSelected ? 'bg-red-500 border-red-500 text-white' : 'border-slate-700'
                           }`}>
                             {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                           </div>
@@ -394,7 +394,7 @@ export default function TeamPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-650 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-orange-500/10 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-650 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-red-500/10 flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>

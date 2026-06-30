@@ -176,7 +176,7 @@ export default function AdminTeamsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-            <Users className="w-6 h-6 text-orange-500" />
+            <Users className="w-6 h-6 text-red-500" />
             Teams Management
           </h1>
           <p className="text-slate-400 text-xs mt-1">
@@ -201,7 +201,7 @@ export default function AdminTeamsPage() {
 
       {loading ? (
         <div className="py-24 text-center text-slate-500 text-xs flex flex-col items-center justify-center gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
+          <Loader2 className="w-6 h-6 animate-spin text-red-500" />
           <span>Fetching bootcamp teams...</span>
         </div>
       ) : filteredTeams.length === 0 ? (
@@ -243,14 +243,14 @@ export default function AdminTeamsPage() {
                     {/* Points details */}
                     <div className="text-right">
                       <p className="text-[10px] text-slate-500 uppercase font-semibold">Total Points</p>
-                      <p className="text-base font-black text-orange-400 font-mono mt-0.5">{team.totalPoints.toLocaleString()}</p>
+                      <p className="text-base font-black text-red-400 font-mono mt-0.5">{team.totalPoints.toLocaleString()}</p>
                     </div>
 
                     {/* Actions Panel */}
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => openModal(team, 'POINTS')}
-                        className="p-2 rounded-lg bg-slate-850 hover:bg-orange-500/10 text-slate-400 hover:text-orange-400 border border-slate-800 transition-colors"
+                        className="p-2 rounded-lg bg-slate-850 hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-slate-800 transition-colors"
                         title="Modify Team Points"
                       >
                         <Award className="w-4 h-4" />
@@ -312,7 +312,7 @@ export default function AdminTeamsPage() {
                             </p>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-xs font-bold text-orange-400 font-mono">{m.points}</p>
+                            <p className="text-xs font-bold text-red-400 font-mono">{m.points}</p>
                             <p className="text-[9px] text-slate-500">pts</p>
                           </div>
                         </div>
@@ -426,10 +426,10 @@ export default function AdminTeamsPage() {
             {activeModal === 'POINTS' && (
               <form onSubmit={handleSubmitAction} className="space-y-4">
                 <h3 className="text-lg font-bold text-white flex items-center gap-1.5" style={{ fontFamily: 'var(--font-display)' }}>
-                  <Award className="w-5 h-5 text-orange-400" /> Adjust Team Points
+                  <Award className="w-5 h-5 text-red-400" /> Adjust Team Points
                 </h3>
                 <p className="text-xs text-slate-400 leading-normal">
-                  The point modification value will be applied individually to all <strong className="text-white">{selectedTeam.members.length} members</strong> of team <strong className="text-orange-400 font-semibold">{selectedTeam.name}</strong>.
+                  The point modification value will be applied individually to all <strong className="text-white">{selectedTeam.members.length} members</strong> of team <strong className="text-red-400 font-semibold">{selectedTeam.name}</strong>.
                 </p>
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Points Change Amount</label>
@@ -439,7 +439,7 @@ export default function AdminTeamsPage() {
                     placeholder="Use positive e.g. 50, or negative e.g. -20"
                     value={pointsVal}
                     onChange={e => setPointsVal(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-650 outline-none focus:border-orange-500/40 transition-colors"
+                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-650 outline-none focus:border-red-500/40 transition-colors"
                   />
                 </div>
                 <div>
@@ -450,13 +450,13 @@ export default function AdminTeamsPage() {
                     placeholder="e.g. Excellent presentation delivery"
                     value={pointsReason}
                     onChange={e => setPointsReason(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-650 outline-none focus:border-orange-500/40 transition-colors"
+                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-650 outline-none focus:border-red-500/40 transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-orange-500/10"
+                  className="w-full py-2.5 bg-red-500 hover:bg-red-700 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-red-500/10"
                 >
                   {submitting ? 'Applying Points...' : 'Apply Points'}
                 </button>

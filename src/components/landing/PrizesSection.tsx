@@ -26,8 +26,8 @@ const prizes = [
     place: '3rd Place',
     prize: '₹10,000',
     icon: Award,
-    color: 'from-orange-600 to-amber-700',
-    shadow: 'shadow-orange-600/20',
+    color: 'from-red-700 to-amber-700',
+    shadow: 'shadow-red-700/20',
     extras: ['Bronze Certificate', 'Swag Kit', 'Goodie Bag'],
     scale: '',
   },
@@ -58,7 +58,7 @@ export default function PrizesSection() {
 
       <div className="max-w-6xl mx-auto px-6 relative">
         <div className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="text-orange-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Compete & Win</span>
+          <span className="text-red-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">Compete & Win</span>
           <h2 className="section-title text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>
             Prizes &{' '}<span className="gradient-text">Rewards</span>
           </h2>
@@ -87,7 +87,7 @@ export default function PrizesSection() {
               <ul className="space-y-2">
                 {prize.extras.map((e) => (
                   <li key={e} className="text-sm text-slate-400 flex items-center justify-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
                     {e}
                   </li>
                 ))}
@@ -100,12 +100,12 @@ export default function PrizesSection() {
         <div className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-4 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDelay: '600ms' }}>
           {specialPrizes.map((sp) => (
             <div key={sp.title} className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/20 border border-slate-700/30">
-              <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-                <sp.icon className="w-5 h-5 text-orange-400" />
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
+                <sp.icon className="w-5 h-5 text-red-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">{sp.title}</p>
-                <p className="text-orange-400 text-xs font-bold">{sp.prize}</p>
+                <p className="text-red-400 text-xs font-bold">{sp.prize}</p>
               </div>
             </div>
           ))}

@@ -8,7 +8,7 @@ const items = [
     icon: Target,
     title: 'Our Mission',
     desc: 'To bridge the gap between academic learning and industry-ready skills through immersive, hands-on bootcamps that prepare students for the future of technology.',
-    color: 'from-orange-500 to-red-500',
+    color: 'from-red-500 to-red-500',
   },
   {
     icon: Eye,
@@ -38,7 +38,7 @@ const items = [
     icon: Code,
     title: 'Future Skills',
     desc: 'AI, IoT, Cybersecurity, ESP32, Computer Vision, Neural Networks — master the technologies that define tomorrow\'s careers.',
-    color: 'from-amber-500 to-orange-500',
+    color: 'from-amber-500 to-red-500',
   },
 ]
 
@@ -66,7 +66,7 @@ export default function AboutSection() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="text-orange-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">
+          <span className="text-red-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">
             About the Bootcamp
           </span>
           <h2 className="section-title text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>

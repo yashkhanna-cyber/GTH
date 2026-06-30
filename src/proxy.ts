@@ -39,13 +39,14 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register')
+  const isAdminLoginPage = pathname === '/admin/login'
+  const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register') || isAdminLoginPage
   const isDashboardPage = pathname.startsWith('/dashboard')
-  const isAdminPage = pathname.startsWith('/admin')
+  const isAdminPage = pathname.startsWith('/admin') && !isAdminLoginPage
 
   if (!user) {
     if (isDashboardPage || isAdminPage) {
-      const url = new URL('/login', req.url)
+      const url = new URL(isAdminPage ? '/admin/login' : '/login', req.url)
       url.searchParams.set('from', pathname)
       const response = NextResponse.redirect(url)
       response.cookies.delete(COOKIE_NAME)

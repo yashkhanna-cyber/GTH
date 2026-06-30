@@ -163,7 +163,7 @@ export default function AdminProjectsPage() {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-red-500/20 transition-all w-full sm:w-auto"
+          className="px-5 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-red-500/20 transition-all w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Add Project
@@ -361,7 +361,7 @@ export default function AdminProjectsPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {submitting ? (
                   <>

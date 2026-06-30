@@ -377,7 +377,7 @@ CREATE POLICY "Allow write access for admins on attendance"
                                 <button
                                   disabled={updatingId === student.id || !activeStatus}
                                   onClick={() => activeStatus && saveAttendance(student.id, activeStatus)}
-                                  className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 disabled:bg-slate-800 disabled:text-slate-650 disabled:border-slate-850 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-orange-500/10 flex items-center gap-1"
+                                  className="px-3 py-1.5 bg-red-500 hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-650 disabled:border-slate-850 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-red-500/10 flex items-center gap-1"
                                 >
                                   {updatingId === student.id ? 'Saving...' : 'Update'}
                                 </button>

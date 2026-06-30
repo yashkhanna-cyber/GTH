@@ -8,7 +8,7 @@ const floatingCards = [
   { icon: Brain, label: 'AI & ML', color: 'from-purple-500 to-indigo-600', delay: '0s', x: '10%', y: '25%' },
   { icon: Cpu, label: 'IoT', color: 'from-cyan-500 to-blue-600', delay: '1s', x: '80%', y: '20%' },
   { icon: Shield, label: 'Cyber Security', color: 'from-emerald-500 to-green-600', delay: '2s', x: '75%', y: '65%' },
-  { icon: Wifi, label: 'ESP32', color: 'from-orange-500 to-red-600', delay: '0.5s', x: '15%', y: '70%' },
+  { icon: Wifi, label: 'ESP32', color: 'from-red-500 to-red-600', delay: '0.5s', x: '15%', y: '70%' },
   { icon: Zap, label: 'Neural Net', color: 'from-yellow-500 to-amber-600', delay: '1.5s', x: '50%', y: '80%' },
 ]
 
@@ -44,7 +44,7 @@ export default function HeroSection() {
         }} />
         
         {/* Gradient Orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1.5s' }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-[150px]" />
       </div>
@@ -71,7 +71,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-28 pb-20">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-sm text-orange-300 font-medium mb-8 animate-slideDown" style={{ animationDelay: '0.2s' }}>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-sm text-red-300 font-medium mb-8 animate-slideDown" style={{ animationDelay: '0.2s' }}>
           <Rocket className="w-4 h-4" />
           <span>3-Day Intensive Bootcamp • July 15-17, 2026</span>
         </div>
@@ -98,7 +98,7 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 opacity-0 animate-slideUp" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }}>
           <Link
             href="/register"
-            className="btn-primary text-base px-8 py-4 rounded-2xl shadow-xl shadow-orange-500/20"
+            className="btn-primary text-base px-8 py-4 rounded-2xl shadow-xl shadow-red-500/20"
           >
             Register for Bootcamp
             <ArrowRight className="w-5 h-5" />

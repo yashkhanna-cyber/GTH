@@ -22,10 +22,10 @@ export default function CertificatesPage() {
       </div>
 
       {/* Prominent notice banner */}
-      <div className="p-5 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-start gap-3">
-        <Info className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
+      <div className="p-5 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
+        <Info className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
         <div>
-          <h3 className="text-orange-400 font-bold text-sm">Bootcamp Certificate Availability</h3>
+          <h3 className="text-red-400 font-bold text-sm">Bootcamp Certificate Availability</h3>
           <p className="text-slate-350 text-xs mt-1">
             You will get the certificate once the camp is completed. Keep submitting your tasks on time to maintain eligibility.
           </p>
@@ -51,7 +51,7 @@ export default function CertificatesPage() {
             
             <div className="shrink-0">
               {c.ready ? (
-                <button className="px-4 py-2 rounded-xl bg-orange-500/10 text-orange-400 text-sm font-medium hover:bg-orange-500/20 transition-all flex items-center gap-1.5">
+                <button className="px-4 py-2 rounded-xl bg-red-500/10 text-red-400 text-sm font-medium hover:bg-red-500/20 transition-all flex items-center gap-1.5">
                   <Download className="w-3.5 h-3.5" /> Download
                 </button>
               ) : (

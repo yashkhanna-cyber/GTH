@@ -52,7 +52,7 @@ export default function DashboardPage() {
   const rank = user?.student?.leaderboard?.rank ? `#${user.student.leaderboard.rank}` : 'N/A'
 
   const quickStats = [
-    { label: 'Total Points', value: totalPoints.toLocaleString(), icon: Trophy, color: 'from-orange-500 to-amber-500', change: 'Updated real-time' },
+    { label: 'Total Points', value: totalPoints.toLocaleString(), icon: Trophy, color: 'from-red-500 to-amber-500', change: 'Updated real-time' },
     { label: 'Current Rank', value: rank, icon: Target, color: 'from-purple-500 to-indigo-500', change: 'Overall rank' },
     { label: 'Challenges', value: tasks.length.toString(), icon: Zap, color: 'from-cyan-500 to-blue-500', change: 'Tasks published' },
     { label: 'Team', value: user?.student?.team?.name || 'No Team', icon: Users, color: 'from-emerald-500 to-green-500', change: 'Your assigned team' },
@@ -61,7 +61,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 p-6 sm:p-8">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-red-500 to-red-700 p-6 sm:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4" />
         <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-white/5 rounded-full translate-y-1/2" />
         <div className="relative">
@@ -72,7 +72,7 @@ export default function DashboardPage() {
             TechVerse is underway! Build projects, complete tasks, and compete on the leaderboard.
           </p>
           <div className="flex gap-3 mt-5">
-            <Link href="/dashboard/projects" className="px-5 py-2.5 bg-white text-orange-600 rounded-xl text-sm font-semibold hover:bg-white/90 transition-all">
+            <Link href="/dashboard/projects" className="px-5 py-2.5 bg-white text-red-700 rounded-xl text-sm font-semibold hover:bg-white/90 transition-all">
               View Projects
             </Link>
             <Link href="/dashboard/leaderboard" className="px-5 py-2.5 bg-white/15 text-white rounded-xl text-sm font-semibold hover:bg-white/25 transition-all border border-white/20">
@@ -104,7 +104,7 @@ export default function DashboardPage() {
         <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-lg font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
-              <BarChart3 className="w-5 h-5 inline mr-2 text-orange-400" />
+              <BarChart3 className="w-5 h-5 inline mr-2 text-red-400" />
               Recent Activity
             </h2>
           </div>
@@ -130,7 +130,7 @@ export default function DashboardPage() {
               <Clock className="w-5 h-5 inline mr-2 text-purple-400" />
               Upcoming Tasks
             </h2>
-            <Link href="/dashboard/tasks" className="text-xs text-orange-400 hover:text-orange-300 font-medium">View All</Link>
+            <Link href="/dashboard/tasks" className="text-xs text-red-400 hover:text-red-300 font-medium">View All</Link>
           </div>
           
           {loadingTasks ? (

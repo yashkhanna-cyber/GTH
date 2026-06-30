@@ -372,7 +372,7 @@ export default function AdminLeaderboardPage() {
                                 <div>
                                   <p className="font-semibold text-slate-300">{sub.task.name}</p>
                                   <p className="text-[10px] text-slate-500 mt-0.5">
-                                    Status: <span className="font-semibold uppercase text-orange-400">{sub.status}</span> • {new Date(sub.submittedAt).toLocaleDateString()}
+                                    Status: <span className="font-semibold uppercase text-red-400">{sub.status}</span> • {new Date(sub.submittedAt).toLocaleDateString()}
                                   </p>
                                 </div>
                                 <span className="font-bold text-slate-400 shrink-0">
@@ -463,7 +463,7 @@ export default function AdminLeaderboardPage() {
                         <button
                           type="submit"
                           disabled={adjSubmitting}
-                          className="w-full py-3 rounded-xl bg-gradient-to-r from-red-500 to-orange-600 text-white font-semibold text-xs hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-60 font-bold"
+                          className="w-full py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-xs hover:shadow-lg hover:shadow-red-500/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-60 font-bold"
                         >
                           {adjSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                           Submit Score Adjustment

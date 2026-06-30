@@ -8,7 +8,7 @@ const highlights = [
   { icon: Users, title: '200+ Students', desc: 'Network with passionate peers from all departments', color: 'text-blue-400', bg: 'bg-blue-500/10' },
   { icon: Wrench, title: 'Hardware Lab', desc: 'ESP32, sensors, servos, cameras — all provided', color: 'text-green-400', bg: 'bg-green-500/10' },
   { icon: BookOpen, title: '4 Major Projects', desc: 'Build gesture-controlled servos, AI face RGB, and more', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  { icon: Rocket, title: 'Real-World Skills', desc: 'Learn what matters: AI, IoT, Cybersecurity fundamentals', color: 'text-orange-400', bg: 'bg-orange-500/10' },
+  { icon: Rocket, title: 'Real-World Skills', desc: 'Learn what matters: AI, IoT, Cybersecurity fundamentals', color: 'text-red-400', bg: 'bg-red-500/10' },
   { icon: Monitor, title: 'Live Dashboard', desc: 'Track your progress, scores, and rank in real-time', color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
   { icon: Award, title: 'Certificates', desc: 'Get verifiable certificates with unique QR codes', color: 'text-pink-400', bg: 'bg-pink-500/10' },
   { icon: Clock, title: '3 Intense Days', desc: 'Non-stop learning, coding, building, and competing', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
@@ -35,7 +35,7 @@ export default function HighlightsSection() {
 
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="text-orange-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">What Awaits You</span>
+          <span className="text-red-400 text-sm font-semibold uppercase tracking-[0.2em] mb-3 block">What Awaits You</span>
           <h2 className="section-title text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>
             Bootcamp{' '}<span className="gradient-text">Highlights</span>
           </h2>

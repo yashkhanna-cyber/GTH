@@ -94,7 +94,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
           </span>
         </div>
 
-        <h3 className="text-white font-bold text-lg group-hover:text-orange-400 transition-colors mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+        <h3 className="text-white font-bold text-lg group-hover:text-red-400 transition-colors mb-2" style={{ fontFamily: 'var(--font-display)' }}>
           {task.name}
         </h3>
         
@@ -120,7 +120,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
           </div>
           <div>
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Remaining Time</p>
-            <p className="text-xs text-orange-400 font-bold font-mono">{countdown}</p>
+            <p className="text-xs text-red-400 font-bold font-mono">{countdown}</p>
           </div>
         </div>
 
@@ -130,7 +130,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
             href={task.referenceFile}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 font-semibold mb-6 bg-orange-500/5 border border-orange-500/10 px-3 py-1.5 rounded-lg"
+            className="inline-flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 font-semibold mb-6 bg-red-500/5 border border-red-500/10 px-3 py-1.5 rounded-lg"
           >
             <FileText className="w-3.5 h-3.5" />
             Reference Materials
@@ -142,7 +142,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
         {/* Mentor feedback */}
         {submission?.reviewComments && (
           <div className="bg-slate-700/20 border border-slate-700/30 p-3.5 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold text-orange-400 uppercase tracking-wide">Mentor Comments</p>
+            <p className="text-[10px] font-bold text-red-400 uppercase tracking-wide">Mentor Comments</p>
             <p className="text-xs text-slate-300 italic">"{submission.reviewComments}"</p>
           </div>
         )}
@@ -150,7 +150,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
         <div className="flex items-center justify-between gap-4">
           <div className="shrink-0">
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Reward</p>
-            <p className="text-sm text-orange-400 font-bold">
+            <p className="text-sm text-red-400 font-bold">
               {submission?.status === 'APPROVED' ? `+${submission.pointsAwarded}` : `+${task.points}`} Points
             </p>
           </div>
@@ -158,7 +158,7 @@ function TaskCard({ task, onSubmitClick }: { task: Task; onSubmitClick: () => vo
           {(!submission || submission.status === 'PENDING' || submission.status === 'REJECTED' || submission.status === 'CHANGES_REQUESTED') ? (
             <button
               onClick={onSubmitClick}
-              className="px-4 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-orange-500/10 flex items-center gap-1.5"
+              className="px-4 py-2.5 bg-red-500 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-red-500/10 flex items-center gap-1.5"
             >
               <Send className="w-3.5 h-3.5" />
               {submission ? 'Resubmit Task' : 'Submit Task'}
@@ -270,7 +270,7 @@ export default function TasksPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] gap-3">
-        <Loader2 className="w-8 h-8 text-orange-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-red-500 animate-spin" />
         <p className="text-slate-400 text-sm">Loading tasks...</p>
       </div>
     )
@@ -281,7 +281,7 @@ export default function TasksPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white flex items-center gap-2.5" style={{ fontFamily: 'var(--font-display)' }}>
-          <ClipboardList className="w-6 h-6 text-orange-400" />
+          <ClipboardList className="w-6 h-6 text-red-400" />
           Assigned Tasks
         </h1>
         <p className="text-sm text-slate-400 mt-1">Complete tasks, submit work, and earn points on the leaderboard.</p>
@@ -289,8 +289,8 @@ export default function TasksPage() {
 
       {tasks.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700/80 bg-slate-900/10 p-16 text-center max-w-xl mx-auto my-12">
-          <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center mb-6 mx-auto">
-            <ClipboardList className="w-8 h-8 text-orange-400" />
+          <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6 mx-auto">
+            <ClipboardList className="w-8 h-8 text-red-400" />
           </div>
           <h3 className="text-white font-bold text-lg mb-2" style={{ fontFamily: 'var(--font-display)' }}>
             No Tasks Assigned Yet
@@ -315,7 +315,7 @@ export default function TasksPage() {
           <div className="relative z-10 w-full max-w-lg rounded-2xl bg-[#0b1120] border border-slate-850 p-6 shadow-2xl space-y-5">
             <div className="flex items-center justify-between border-b border-slate-850 pb-4">
               <h2 className="text-base font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-                <Send className="w-4.5 h-4.5 text-orange-400" />
+                <Send className="w-4.5 h-4.5 text-red-400" />
                 Submit Task: {selectedTask.name}
               </h2>
               <button onClick={() => setSelectedTask(null)} className="text-slate-500 hover:text-slate-300">
@@ -345,7 +345,7 @@ export default function TasksPage() {
                   onClick={() => document.getElementById('task-file-input')?.click()}
                   className="w-full py-5 rounded-xl border border-dashed border-slate-800 bg-slate-900/20 hover:bg-slate-900/40 text-slate-400 hover:text-white transition-all flex flex-col items-center justify-center gap-1.5"
                 >
-                  <FileText className="w-6 h-6 text-orange-400" />
+                  <FileText className="w-6 h-6 text-red-400" />
                   <span className="text-xs font-semibold">
                     {file ? file.name : 'Select file (ZIP, RAR, PDF, Document, Image)'}
                   </span>
@@ -367,14 +367,14 @@ export default function TasksPage() {
                   value={comments}
                   onChange={e => setComments(e.target.value)}
                   placeholder="Write any comments for your reviewer..."
-                  className="w-full px-4 py-3 rounded-xl bg-slate-900/40 border border-slate-800/60 text-white placeholder-slate-650 focus:outline-none focus:border-orange-500 text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/40 border border-slate-800/60 text-white placeholder-slate-650 focus:outline-none focus:border-red-500 text-sm resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 font-bold"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm hover:shadow-lg hover:shadow-red-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-60 font-bold"
               >
                 {submitting ? (
                   <>

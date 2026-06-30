@@ -38,8 +38,16 @@ export async function GET(req: NextRequest) {
     
     const totalPoints = (pointsSumData || []).reduce((sum, u) => sum + (u.total_points || 0), 0)
 
-    // 6. Attendance Rate (no table exists, defaulting to UI design match)
-    const attendanceRate = 94
+    // 6. Dynamic Attendance Rate from database
+    let attendanceRate = 100
+    const { data: attendanceData, error: attendanceError } = await supabaseAdmin
+      .from('attendance')
+      .select('status')
+
+    if (!attendanceError && attendanceData && attendanceData.length > 0) {
+      const presents = attendanceData.filter(r => r.status === 'PRESENT').length
+      attendanceRate = Math.round((presents / attendanceData.length) * 100)
+    }
 
     // 7. Recent Submissions
     const { data: recentSubmissionsData, error: recentError } = await supabaseAdmin

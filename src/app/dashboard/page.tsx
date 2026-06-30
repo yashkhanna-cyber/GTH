@@ -17,6 +17,9 @@ export default function DashboardPage() {
   const { user } = useUser()
   const [tasks, setTasks] = useState<TaskData[]>([])
   const [loadingTasks, setLoadingTasks] = useState(true)
+  const [activities, setActivities] = useState<{ action: string; time: string; type: string }[]>([
+    { action: 'Welcome to GTH TechVerse 2026!', time: 'Just now', type: 'system' }
+  ])
 
   useEffect(() => {
     fetch('/api/tasks')
@@ -28,6 +31,21 @@ export default function DashboardPage() {
       })
       .catch(err => console.error(err))
       .finally(() => setLoadingTasks(false))
+
+    // Fetch dynamic notifications as recent activities
+    fetch('/api/notifications')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.notifications && data.notifications.length > 0) {
+          const mapped = data.notifications.slice(0, 4).map((n: any) => ({
+            action: n.message,
+            time: n.time,
+            type: n.type
+          }))
+          setActivities(mapped)
+        }
+      })
+      .catch(err => console.error(err))
   }, [])
 
   const totalPoints = user?.student?.leaderboard?.totalPoints ?? 0
@@ -38,10 +56,6 @@ export default function DashboardPage() {
     { label: 'Current Rank', value: rank, icon: Target, color: 'from-purple-500 to-indigo-500', change: 'Overall rank' },
     { label: 'Challenges', value: tasks.length.toString(), icon: Zap, color: 'from-cyan-500 to-blue-500', change: 'Tasks published' },
     { label: 'Team', value: user?.student?.team?.name || 'No Team', icon: Users, color: 'from-emerald-500 to-green-500', change: 'Your assigned team' },
-  ]
-
-  const recentActivity = [
-    { action: 'Welcome to GTH TechVerse 2026!', time: 'Just now', type: 'system' }
   ]
 
   return (
@@ -95,7 +109,7 @@ export default function DashboardPage() {
             </h2>
           </div>
           <div className="space-y-3">
-            {recentActivity.map((item, i) => (
+            {activities.map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-700/20 transition-all">
                 <div className="w-8 h-8 rounded-lg bg-slate-700/50 flex items-center justify-center shrink-0 mt-0.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />

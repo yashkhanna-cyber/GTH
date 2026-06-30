@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
       console.error('Supabase profile insertion error:', profileError)
       // Cleanup auth user on profile creation failure
       await supabaseAdmin.auth.admin.deleteUser(userId)
-      return NextResponse.json({ error: 'Failed to create user profile' }, { status: 500 })
+      return NextResponse.json({ error: `Failed to create user profile: ${profileError.message}` }, { status: 500 })
     }
 
     // 3. If referral code was valid, apply referral bonuses

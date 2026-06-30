@@ -113,7 +113,7 @@ export default function AdminOverview() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: 'Add Points', href: '/admin/points', icon: Trophy, color: 'from-orange-500 to-amber-500' },
-              { label: 'Review Submissions', href: '/admin/projects', icon: FileCheck, color: 'from-emerald-500 to-green-500' },
+              { label: 'Review Submissions', href: '/admin/tasks', icon: FileCheck, color: 'from-emerald-500 to-green-500' },
               { label: 'Mark Attendance', href: '/admin/attendance', icon: Clock, color: 'from-blue-500 to-indigo-500' },
               { label: 'Announcements', href: '/admin/announcements', icon: Zap, color: 'from-purple-500 to-indigo-500' },
             ].map(a => (

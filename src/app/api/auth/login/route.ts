@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (authError || !authData.user) {
+      console.error('Supabase Auth error details:', authError)
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
     }
 

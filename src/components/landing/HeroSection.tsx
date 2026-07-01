@@ -70,10 +70,18 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-28 pb-20">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-sm text-red-300 font-medium mb-8 animate-slideDown" style={{ animationDelay: '0.2s' }}>
-          <Rocket className="w-4 h-4" />
-          <span>3-Day Intensive Bootcamp • July 15-17, 2026</span>
+        {/* Branding Badge */}
+        <div className="flex flex-col items-center gap-3 mb-8 animate-slideDown" style={{ animationDelay: '0.2s' }}>
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+            <span className="text-[10px] text-slate-550 font-bold uppercase tracking-widest">Presented By</span>
+            <div className="h-6 px-1.5 bg-white rounded flex items-center justify-center">
+              <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-4.5 object-contain" />
+            </div>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-sm text-red-300 font-medium">
+            <Rocket className="w-4 h-4 animate-pulse" />
+            <span>3-Day Intensive Bootcamp • July 15-17, 2026</span>
+          </div>
         </div>
 
         {/* Heading */}

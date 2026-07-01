@@ -29,15 +29,37 @@ export async function GET() {
       targetGroups.push(`batch:${dbUser.batch}`)
     }
 
-    const { data: announcements, error } = await supabaseAdmin
+    let announcements: any[] = []
+    const { data: dataNew, error: errorNew } = await supabaseAdmin
       .from('announcements')
       .select('*')
       .in('target_group', targetGroups)
       .order('created_at', { ascending: false })
 
-    if (error) {
-      console.error('Fetch student announcements error:', error)
-      return NextResponse.json({ error: 'Failed to fetch announcements' }, { status: 500 })
+    if (!errorNew) {
+      announcements = dataNew || []
+    } else {
+      console.warn('Querying target_group failed, trying fallback to target_audience:', errorNew.message)
+      const { data: dataOld, error: errorOld } = await supabaseAdmin
+        .from('announcements')
+        .select('*')
+        .in('target_audience', targetGroups)
+        .order('created_at', { ascending: false })
+
+      if (errorOld) {
+        console.error('Fetch student announcements error (both schemas failed):', errorOld)
+        return NextResponse.json({ error: 'Failed to fetch announcements' }, { status: 500 })
+      }
+
+      // Map old columns to the new schema format expected by the frontend
+      announcements = (dataOld || []).map((ann: any) => ({
+        id: ann.id,
+        title: ann.title,
+        message: ann.message || ann.content || '',
+        type: ann.type || 'INFO',
+        target_group: ann.target_group || ann.target_audience || 'ALL',
+        created_at: ann.created_at
+      }))
     }
 
     return NextResponse.json({ success: true, announcements })

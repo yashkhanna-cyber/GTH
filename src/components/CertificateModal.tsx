@@ -161,27 +161,17 @@ export default function CertificateModal({
 
               {/* Logos Section */}
               <div className="flex justify-between items-center z-10">
-                {/* Geeta University Styled SVG Logo */}
+                {/* 1st Place Logo: Geeta University Logo */}
                 <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                    </svg>
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-white font-extrabold text-xs uppercase tracking-[0.1em]" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                      Geeta University
-                    </span>
-                    <span className="text-[7px] text-amber-500/80 font-bold uppercase tracking-[0.2em]">
-                      Established under Haryana Act 2 of 2022
-                    </span>
+                  <div className="h-11 px-3 bg-white rounded-lg flex items-center justify-center shadow-md border border-white/10">
+                    <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-8 object-contain" />
                   </div>
                 </div>
 
-                {/* GTH Main Logo Image */}
+                {/* Main Logo: GTH Logo */}
                 <div className="flex items-center gap-2">
-                  <div className="h-10 px-2.5 bg-white rounded-lg flex items-center justify-center shadow-md">
-                    <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
+                  <div className="h-11 px-3 bg-white rounded-lg flex items-center justify-center shadow-md border border-white/10">
+                    <img src="/gth-logo.jpg" alt="GTH Logo" className="h-8 object-contain" />
                   </div>
                 </div>
               </div>

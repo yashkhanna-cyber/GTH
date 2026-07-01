@@ -85,19 +85,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${darkMode ? 'bg-[#0b1120] border-r border-slate-800/50' : 'bg-white border-r border-slate-200'}`}>
           {/* Logo */}
-          <div className="p-5 flex items-center justify-between">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="h-9 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-6 object-contain" />
+          <div className="p-5 flex flex-col gap-2.5">
+            <div className="flex items-center justify-between">
+              <Link href="/dashboard" className="flex items-center gap-2">
+                <div className="h-9 px-2 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                  <img src="/gth-logo.jpg" alt="GTH Logo" className="h-6 object-contain" />
+                </div>
+                <div>
+                  <span className={`font-bold text-sm block leading-tight ${darkMode ? 'text-white' : 'text-slate-900'}`} style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
+                  <span className="text-red-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Student Portal</span>
+                </div>
+              </Link>
+              <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
+                <X className={`w-5 h-5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
+              </button>
+            </div>
+            
+            {/* Geeta University Branding */}
+            <div className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg border ${
+              darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+            }`}>
+              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">BY</span>
+              <div className="h-5.5 px-1.5 bg-white rounded flex items-center justify-center">
+                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-4 object-contain" />
               </div>
-              <div>
-                <span className={`font-bold text-sm block leading-tight ${darkMode ? 'text-white' : 'text-slate-900'}`} style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-red-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Student</span>
-              </div>
-            </Link>
-            <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
-              <X className={`w-5 h-5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
-            </button>
+            </div>
           </div>
 
           {/* Nav Links */}

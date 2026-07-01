@@ -285,6 +285,16 @@ CREATE POLICY "Allow update for own team invitation or admins"
 
 
 -- --- ANNOUNCEMENTS SYSTEM ---
+-- NOTE: If your announcements table was previously created using older schema column names 
+-- (e.g. content instead of message, or target_audience instead of target_group), 
+-- run the following migration in your Supabase SQL Editor:
+-- 
+-- ALTER TABLE public.announcements ADD COLUMN IF NOT EXISTS message TEXT;
+-- ALTER TABLE public.announcements ADD COLUMN IF NOT EXISTS type TEXT NOT NULL DEFAULT 'INFO' CHECK (type IN ('INFO', 'SUCCESS', 'WARNING', 'ERROR'));
+-- ALTER TABLE public.announcements ADD COLUMN IF NOT EXISTS target_group TEXT NOT NULL DEFAULT 'ALL';
+-- UPDATE public.announcements SET message = content WHERE message IS NULL AND content IS NOT NULL;
+-- UPDATE public.announcements SET target_group = target_audience WHERE target_group = 'ALL' AND target_audience IS NOT NULL;
+
 CREATE TABLE IF NOT EXISTS public.announcements (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,

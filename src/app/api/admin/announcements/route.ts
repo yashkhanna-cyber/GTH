@@ -19,7 +19,17 @@ export async function GET() {
       return NextResponse.json({ error: 'Failed to fetch announcements' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true, announcements })
+    // Format for frontend compatibility under both old and new database schemas
+    const formattedAnnouncements = (announcements || []).map((ann: any) => ({
+      id: ann.id,
+      title: ann.title,
+      message: ann.message || ann.content || '',
+      type: ann.type || 'INFO',
+      target_group: ann.target_group || ann.target_audience || 'ALL',
+      created_at: ann.created_at
+    }))
+
+    return NextResponse.json({ success: true, announcements: formattedAnnouncements })
   } catch (error) {
     console.error('Announcements admin GET error:', error)
     return NextResponse.json({ error: 'Failed to load announcements' }, { status: 500 })
@@ -39,8 +49,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Title and message are required' }, { status: 400 })
     }
 
-    // 1. Insert announcement
-    const { data: newAnnouncement, error: announcementError } = await supabaseAdmin
+    let newAnnouncement: any = null
+
+    // 1. Insert announcement (Try new schema first)
+    const { data: dataNew, error: errorNew } = await supabaseAdmin
       .from('announcements')
       .insert({
         title,
@@ -51,9 +63,35 @@ export async function POST(req: NextRequest) {
       .select()
       .single()
 
-    if (announcementError) {
-      console.error('Create announcement error:', announcementError)
-      return NextResponse.json({ error: 'Failed to create announcement' }, { status: 500 })
+    if (!errorNew) {
+      newAnnouncement = dataNew
+    } else {
+      console.warn('Inserting announcement with new schema failed, trying fallback to old schema:', errorNew.message)
+      // Fallback: insert with content / target_audience
+      const { data: dataOld, error: errorOld } = await supabaseAdmin
+        .from('announcements')
+        .insert({
+          title,
+          content: message,
+          type: type || 'INFO',
+          target_audience: targetGroup || 'ALL'
+        })
+        .select()
+        .single()
+
+      if (errorOld) {
+        console.error('Create announcement error (both schemas failed):', errorOld)
+        return NextResponse.json({ error: 'Failed to create announcement' }, { status: 500 })
+      }
+
+      newAnnouncement = {
+        id: dataOld.id,
+        title: dataOld.title,
+        message: dataOld.message || dataOld.content || '',
+        type: dataOld.type || 'INFO',
+        target_group: dataOld.target_group || dataOld.target_audience || 'ALL',
+        created_at: dataOld.created_at
+      }
     }
 
     // 2. Fetch matching students
@@ -62,11 +100,11 @@ export async function POST(req: NextRequest) {
     if (targetGroup && targetGroup !== 'ALL') {
       // If it is starting with "team:", query by team
       if (targetGroup.startsWith('team:')) {
-        const teamName = targetGroup.replace('team:', '')
-        query = query.eq('team', teamName)
+         const teamName = targetGroup.replace('team:', '')
+         query = query.eq('team', teamName)
       } else if (targetGroup.startsWith('batch:')) {
-        const batchName = targetGroup.replace('batch:', '')
-        query = query.eq('batch', batchName)
+         const batchName = targetGroup.replace('batch:', '')
+         query = query.eq('batch', batchName)
       }
     }
 

@@ -5,9 +5,9 @@ import { setAuthCookie } from '@/lib/auth'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, email, password, confirmPassword, phone, enrollmentNo, department, branch, year, batch, referralCode } = body
+    const { name, email, password, confirmPassword, phone, enrollmentNo, department, branch, year, batch, referralCode, photo } = body
 
-    if (!name || !email || !password || !enrollmentNo || !department || !branch) {
+    if (!name || !email || !password || !department || !branch) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -30,15 +30,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 409 })
     }
 
-    // Check if enrollment number exists
-    const { data: existingEnrollment } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('enrollment_no', enrollmentNo.trim())
-      .maybeSingle()
+    // Check if enrollment number exists (only if provided)
+    if (enrollmentNo && enrollmentNo.trim() !== '') {
+      const { data: existingEnrollment } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('enrollment_no', enrollmentNo.trim())
+        .maybeSingle()
 
-    if (existingEnrollment) {
-      return NextResponse.json({ error: 'Enrollment number already registered' }, { status: 409 })
+      if (existingEnrollment) {
+        return NextResponse.json({ error: 'Enrollment number already registered' }, { status: 409 })
+      }
     }
 
     // Validate referral code if provided
@@ -69,8 +71,66 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: authError?.message || 'Failed to create auth user' }, { status: 500 })
     }
 
-    const myReferralCode = `GTH-${enrollmentNo.trim().toUpperCase()}`
     const userId = authData.user.id
+
+    // Generate unique referral code: GTH-XXXX (where XXXX is a 4-digit number)
+    let myReferralCode = ''
+    let isUnique = false
+    let attempts = 0
+    while (!isUnique && attempts < 15) {
+      const randNum = Math.floor(1000 + Math.random() * 9000) // 1000 to 9999
+      myReferralCode = `GTH-${randNum}`
+      const { data: dup } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('referral_code', myReferralCode)
+        .maybeSingle()
+      if (!dup) {
+        isUnique = true
+      }
+      attempts++
+    }
+    
+    if (!isUnique) {
+      // fallback in case of collision limits
+      myReferralCode = `GTH-${Date.now().toString().slice(-4)}`
+    }
+
+    // Upload photo if provided
+    let photoUrl = null
+    if (photo) {
+      try {
+        if (photo.startsWith('data:image/')) {
+          const mimeType = photo.split(';')[0].split(':')[1]
+          const base64Data = photo.split(',')[1]
+          const buffer = Buffer.from(base64Data, 'base64')
+          const filename = `avatar-${userId}-${Date.now()}.${mimeType.split('/')[1]}`
+          
+          // Try uploading to avatars bucket
+          const { error: uploadError } = await supabaseAdmin.storage
+            .from('avatars')
+            .upload(filename, buffer, {
+              contentType: mimeType,
+              upsert: true
+            })
+          
+          if (!uploadError) {
+            const { data: { publicUrl } } = supabaseAdmin.storage
+              .from('avatars')
+              .getPublicUrl(filename)
+            photoUrl = publicUrl
+          } else {
+            console.warn('Storage upload failed, saving base64 directly:', uploadError)
+            photoUrl = photo
+          }
+        } else {
+          photoUrl = photo
+        }
+      } catch (e) {
+        console.error('Avatar upload exception:', e)
+        photoUrl = photo
+      }
+    }
 
     // 2. Create User Profile in public users table
     const { error: profileError } = await supabaseAdmin
@@ -82,11 +142,12 @@ export async function POST(req: NextRequest) {
         role: 'Student',
         department,
         referral_code: myReferralCode,
-        enrollment_no: enrollmentNo.trim(),
+        enrollment_no: enrollmentNo ? enrollmentNo.trim() : null,
         branch,
         year: parseInt(year) || 1,
         batch,
-        total_points: 0
+        total_points: 0,
+        photo: photoUrl
       })
 
     if (profileError) {

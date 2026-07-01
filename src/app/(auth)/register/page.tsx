@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, User, Phone, Hash, BookOpen, Building, GraduationCap } from 'lucide-react'
+import { Sparkles, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, User, Phone, Hash, BookOpen, Building, GraduationCap, Upload } from 'lucide-react'
 
 const departments = ['Computer Science & Engineering', 'Electronics & Communication', 'Mechanical Engineering', 'Civil Engineering', 'Electrical Engineering']
 const branches = ['CSE', 'CSE (AI/ML)', 'CSE (Data Science)', 'CSE (Cyber Security)', 'ECE', 'ME', 'CE', 'EE']
@@ -16,10 +16,25 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [form, setForm] = useState({
     name: '', email: '', password: '', confirmPassword: '', phone: '',
-    enrollmentNo: '', department: '', branch: '', year: '1', batch: '', referralCode: '',
+    enrollmentNo: '', department: '', branch: '', year: '1', batch: '', referralCode: '', photo: '',
   })
 
   const updateForm = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }))
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setError('Image size must be less than 2MB')
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        updateForm('photo', reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -104,6 +119,26 @@ export default function RegisterPage() {
               {step === 1 && (
                 <>
                   <p className="text-sm font-semibold text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>Personal Info</p>
+                  
+                  {/* Profile Photo Upload */}
+                  <div className="flex flex-col items-center gap-2 mb-6">
+                    <div className="relative w-20 h-20 rounded-full border-2 border-dashed border-slate-600 flex items-center justify-center overflow-hidden bg-slate-800/40 group hover:border-red-500 transition-colors">
+                      {form.photo ? (
+                        <img src={form.photo} alt="Avatar Preview" className="w-full h-full object-cover" />
+                      ) : (
+                        <Upload className="w-6 h-6 text-slate-400 group-hover:text-red-400 transition-colors" />
+                      )}
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handlePhotoChange} 
+                        className="absolute inset-0 opacity-0 cursor-pointer" 
+                        aria-label="Upload profile picture"
+                      />
+                    </div>
+                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Profile Photo</span>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
                     <div className="relative">
@@ -134,14 +169,6 @@ export default function RegisterPage() {
               {step === 2 && (
                 <>
                   <p className="text-sm font-semibold text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>Academic Details</p>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Enrollment No.</label>
-                    <div className="relative">
-                      <Hash className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input type="text" required value={form.enrollmentNo} onChange={e => updateForm('enrollmentNo', e.target.value)} placeholder="22CSE001"
-                        className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-700/40 border border-slate-600/40 text-white placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all text-sm" />
-                    </div>
-                  </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">Department</label>
                     <div className="relative">

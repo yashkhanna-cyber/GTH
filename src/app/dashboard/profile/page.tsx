@@ -29,9 +29,13 @@ export default function ProfilePage() {
       <div className="rounded-2xl bg-slate-800/30 border border-slate-700/40 overflow-hidden">
         <div className="h-32 bg-gradient-to-r from-red-500 to-purple-600 relative">
           <div className="absolute -bottom-10 left-8">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold border-4 border-[#0f172a] shadow-xl">
-              {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
-            </div>
+            {user?.avatar ? (
+              <img src={user.avatar} alt={user.name} className="w-20 h-20 rounded-2xl border-4 border-[#0f172a] shadow-xl object-cover" />
+            ) : (
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold border-4 border-[#0f172a] shadow-xl">
+                {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
+              </div>
+            )}
           </div>
         </div>
         <div className="pt-14 px-8 pb-6">

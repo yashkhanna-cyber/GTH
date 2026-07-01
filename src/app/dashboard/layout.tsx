@@ -175,9 +175,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Link>
 
               <div className="flex items-center gap-2.5 pl-2">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold">
-                  {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                </div>
+                {user?.avatar ? (
+                  <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-xl object-cover" />
+                ) : (
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-xs font-bold">
+                    {user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </div>
+                )}
                 <div className="hidden sm:block">
                   <p className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-slate-900'}`}>{user?.name}</p>
                   <p className="text-xs text-slate-500">{user?.student?.enrollmentNo || user?.role}</p>

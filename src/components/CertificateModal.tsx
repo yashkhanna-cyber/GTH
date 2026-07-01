@@ -214,13 +214,7 @@ export default function CertificateModal({
                   </p>
                 </div>
 
-                {/* Cyber Security Seal */}
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-slate-900/80 border border-emerald-500/20 rounded-lg">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-450" />
-                  <span className="text-[8px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
-                    Secured by Supabase
-                  </span>
-                </div>
+
 
                 {/* Signatures */}
                 <div className="flex gap-8">

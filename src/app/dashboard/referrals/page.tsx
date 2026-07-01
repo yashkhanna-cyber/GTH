@@ -129,7 +129,7 @@ export default function StudentReferralsPage() {
               <thead>
                 <tr className="border-b border-slate-800 text-slate-500 font-semibold">
                   <th className="pb-3 font-semibold">Student Name</th>
-                  <th className="pb-3 font-semibold">Enrollment No.</th>
+                  <th className="pb-3 font-semibold">Email</th>
                   <th className="pb-3 font-semibold">Registration Date</th>
                   <th className="pb-3 text-right font-semibold">Points Earned</th>
                 </tr>
@@ -138,7 +138,7 @@ export default function StudentReferralsPage() {
                 {referrals.map((ref) => (
                   <tr key={ref.id} className="border-b border-slate-800/50 hover:bg-slate-900/10 transition-colors">
                     <td className="py-3.5 text-white font-medium">{ref.newStudent.user.name}</td>
-                    <td className="py-3.5 text-slate-400 font-mono">{ref.newStudent.enrollmentNo}</td>
+                    <td className="py-3.5 text-slate-400">{ref.newStudent.user.email}</td>
                     <td className="py-3.5 text-slate-400">
                       <span className="inline-flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-slate-500" />

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
           const filename = `avatar-${user.userId}-${Date.now()}.${mimeType.split('/')[1]}`
 
           const { error: uploadError } = await supabaseAdmin.storage
-            .from('avatars')
+            .from('profile-images')
             .upload(filename, buffer, {
               contentType: mimeType,
               upsert: true
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
           if (!uploadError) {
             const { data: { publicUrl } } = supabaseAdmin.storage
-              .from('avatars')
+              .from('profile-images')
               .getPublicUrl(filename)
             photoUrl = publicUrl
           } else {

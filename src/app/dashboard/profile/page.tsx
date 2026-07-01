@@ -177,9 +177,9 @@ export default function ProfilePage() {
         <h3 className="text-lg font-bold text-white mb-4" style={{ fontFamily: 'var(--font-display)' }}>Academic Information</h3>
         <div className="grid sm:grid-cols-2 gap-4">
           {[
-            { icon: GraduationCap, label: 'Department', value: 'Computer Science & Engineering' },
-            { icon: Code, label: 'Branch', value: 'CSE (AI/ML)' },
-            { icon: MapPin, label: 'Year', value: 'Year 3' },
+            { icon: GraduationCap, label: 'Department', value: user?.department || user?.student?.department || 'N/A' },
+            { icon: Code, label: 'Branch', value: user?.branch || user?.student?.branch || 'N/A' },
+            { icon: MapPin, label: 'Year', value: user?.year || user?.student?.year ? `Year ${user.year || user?.student?.year}` : 'N/A' },
             { icon: FileText, label: 'Enrollment', value: user?.student?.enrollmentNo || 'N/A' },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3 p-3 rounded-xl bg-slate-700/20">

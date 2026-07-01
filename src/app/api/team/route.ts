@@ -99,33 +99,15 @@ export async function GET(req: NextRequest) {
 
       const formattedInvites = (invites || []).map(inv => {
         const teamObj: any = inv.teams
+        const leaderObj: any = teamObj?.users
         return {
           id: inv.id,
           teamId: inv.team_id,
           teamName: teamObj?.team_name,
           tagline: teamObj?.tagline,
-          leaderName: teamObj?.mentor || 'GTH Leader' // Fallback or retrieve leader name
+          leaderName: leaderObj?.full_name || teamObj?.mentor || 'GTH Leader'
         }
       })
-
-      // Get names of leaders if not present
-      for (const invite of formattedInvites) {
-        // Fetch leader info
-        const { data: teamDetail } = await supabaseAdmin
-          .from('teams')
-          .select('leader_id')
-          .eq('id', invite.teamId)
-          .maybeSingle()
-        
-        if (teamDetail?.leader_id) {
-          const { data: leaderObj } = await supabaseAdmin
-            .from('users')
-            .select('full_name')
-            .eq('id', teamDetail.leader_id)
-            .maybeSingle()
-          invite.leaderName = leaderObj?.full_name || 'Team Leader'
-        }
-      }
 
       // Fetch all eligible students (students not in a team)
       const { data: eligible } = await supabaseAdmin
@@ -238,15 +220,17 @@ export async function POST(req: NextRequest) {
       .update({ team: teamName.trim() })
       .eq('id', user.userId)
 
-    // 7. Insert invitations and create notifications
+    // 7. Upsert invitations and create notifications
     for (const studentId of invitedStudentIds) {
-      // 7a. Insert invitation record
+      // 7a. Upsert invitation record (handles cases where a student was previously invited/declined)
       await supabaseAdmin
         .from('team_invitations')
-        .insert({
+        .upsert({
           team_id: newTeam.id,
           student_id: studentId,
           status: 'PENDING'
+        }, {
+          onConflict: 'team_id,student_id'
         })
 
       // 7b. Create notification

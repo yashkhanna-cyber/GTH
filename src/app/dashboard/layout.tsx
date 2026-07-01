@@ -13,7 +13,8 @@ import {
 interface UserData {
   id: string; email: string; name: string; role: string; avatar?: string;
   bio?: string; skills?: string; linkedin?: string; github?: string; instagram?: string;
-  student?: { id: string; enrollmentNo: string; team?: { name: string }; leaderboard?: { totalPoints: number; rank: number } };
+  department?: string; branch?: string; year?: number; batch?: string;
+  student?: { id: string; enrollmentNo: string; department?: string; branch?: string; year?: number; batch?: string; team?: { name: string }; leaderboard?: { totalPoints: number; rank: number } };
 }
 
 const UserContext = createContext<{ user: UserData | null; loading: boolean }>({ user: null, loading: true })

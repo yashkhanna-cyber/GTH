@@ -106,9 +106,9 @@ export async function POST(req: NextRequest) {
           const buffer = Buffer.from(base64Data, 'base64')
           const filename = `avatar-${userId}-${Date.now()}.${mimeType.split('/')[1]}`
           
-          // Try uploading to avatars bucket
+          // Try uploading to profile-images bucket
           const { error: uploadError } = await supabaseAdmin.storage
-            .from('avatars')
+            .from('profile-images')
             .upload(filename, buffer, {
               contentType: mimeType,
               upsert: true
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
           
           if (!uploadError) {
             const { data: { publicUrl } } = supabaseAdmin.storage
-              .from('avatars')
+              .from('profile-images')
               .getPublicUrl(filename)
             photoUrl = publicUrl
           } else {

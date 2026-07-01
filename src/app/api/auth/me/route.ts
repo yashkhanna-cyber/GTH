@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { getAuthUser } from '@/lib/auth'
 import { supabaseAdmin } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const user = await getAuthUser()
@@ -42,7 +44,7 @@ export async function GET() {
       id: dbUser.id,
       email: dbUser.email,
       name: dbUser.full_name,
-      phone: dbUser.enrollment_no, // mapping enrollment number to phone for display purposes if needed, but the original also has phone field
+      phone: dbUser.enrollment_no,
       avatar: dbUser.photo,
       role: uppercaseRole,
       bio: dbUser.bio,
@@ -50,9 +52,17 @@ export async function GET() {
       linkedin: dbUser.linkedin,
       github: dbUser.github,
       instagram: dbUser.instagram,
+      department: dbUser.department,
+      branch: dbUser.branch,
+      year: dbUser.year,
+      batch: dbUser.batch,
       student: dbUser.role === 'Student' ? {
         id: dbUser.id,
         enrollmentNo: dbUser.enrollment_no || '',
+        department: dbUser.department || '',
+        branch: dbUser.branch || '',
+        year: dbUser.year || 1,
+        batch: dbUser.batch || '',
         team: dbUser.team ? {
           name: dbUser.team
         } : null,

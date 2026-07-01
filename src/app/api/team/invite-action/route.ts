@@ -55,16 +55,31 @@ export async function POST(req: NextRequest) {
       }
 
       // Update invitation status to ACCEPTED
-      await supabaseAdmin
+      const { error: inviteUpdateError } = await supabaseAdmin
         .from('team_invitations')
         .update({ status: 'ACCEPTED' })
         .eq('id', inviteId)
 
+      if (inviteUpdateError) {
+        console.error('Failed to update invitation status:', inviteUpdateError)
+        return NextResponse.json({ error: 'Failed to accept invitation: ' + inviteUpdateError.message }, { status: 500 })
+      }
+
       // Add student to the team
-      await supabaseAdmin
+      const { error: userUpdateError } = await supabaseAdmin
         .from('users')
         .update({ team: teamName })
         .eq('id', user.userId)
+
+      if (userUpdateError) {
+        console.error('Failed to update student profile team:', userUpdateError)
+        // Rollback invitation status to PENDING
+        await supabaseAdmin
+          .from('team_invitations')
+          .update({ status: 'PENDING' })
+          .eq('id', inviteId)
+        return NextResponse.json({ error: 'Failed to join the team: ' + userUpdateError.message }, { status: 500 })
+      }
 
       // Notify the leader
       if (leaderId) {

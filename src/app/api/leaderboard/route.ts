@@ -9,13 +9,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
-    // 1. Fetch top 100 students sorted by total_points DESC
+    // 1. Fetch all students sorted by total_points DESC
     const { data: students, error: studentsError } = await supabaseAdmin
       .from('users')
       .select('*')
       .eq('role', 'Student')
       .order('total_points', { ascending: false })
-      .limit(100)
 
     if (studentsError) {
       console.error('Fetch leaderboard students error:', studentsError)

@@ -70,7 +70,7 @@ export default function StudentReferralsPage() {
           <div>
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-2">My Referral Code</h3>
             <p className="text-xs text-slate-400 leading-relaxed mb-6">
-              Share your referral code with classmates. When they register using your code, you receive 10 points immediately.
+              Share your referral code with classmates. When they register using your code, you receive 250 points immediately.
             </p>
           </div>
 

@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
 
     // 3. If referral code was valid, apply referral bonuses
     if (referrer) {
-      const bonusPoints = 10
+      const bonusPoints = 250
 
       // 3a. Update referrer's points
       const newReferrerPoints = (referrer.total_points || 0) + bonusPoints

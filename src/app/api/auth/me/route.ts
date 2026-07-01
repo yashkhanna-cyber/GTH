@@ -45,6 +45,11 @@ export async function GET() {
       phone: dbUser.enrollment_no, // mapping enrollment number to phone for display purposes if needed, but the original also has phone field
       avatar: dbUser.photo,
       role: uppercaseRole,
+      bio: dbUser.bio,
+      skills: dbUser.skills,
+      linkedin: dbUser.linkedin,
+      github: dbUser.github,
+      instagram: dbUser.instagram,
       student: dbUser.role === 'Student' ? {
         id: dbUser.id,
         enrollmentNo: dbUser.enrollment_no || '',

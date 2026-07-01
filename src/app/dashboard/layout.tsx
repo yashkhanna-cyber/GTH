@@ -12,6 +12,7 @@ import {
 
 interface UserData {
   id: string; email: string; name: string; role: string; avatar?: string;
+  bio?: string; skills?: string; linkedin?: string; github?: string; instagram?: string;
   student?: { id: string; enrollmentNo: string; team?: { name: string }; leaderboard?: { totalPoints: number; rank: number } };
 }
 

@@ -31,14 +31,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex items-center gap-2">
-            <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
-              <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
-            </div>
-            <span className="text-white/30 text-lg font-light">|</span>
-            <div className="h-10 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
-              <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-7 object-contain" />
-            </div>
+          <div className="h-11 px-3 py-1 rounded-xl bg-white flex items-center gap-2.5 shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all border border-slate-100">
+            <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
+            <div className="h-5 w-px bg-slate-250" />
+            <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-7 object-contain" />
           </div>
           <div className="flex flex-col">
             <span className="text-white font-bold text-lg leading-tight tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>

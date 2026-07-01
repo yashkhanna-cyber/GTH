@@ -16,17 +16,14 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="mb-4">
-              <div className="inline-block p-2 rounded-xl bg-white mb-3 shadow-md">
-                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-9 object-contain" />
+              <div className="inline-flex p-2.5 rounded-xl bg-white mb-4 shadow-md border border-slate-100 items-center gap-2">
+                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
+                <div className="w-px h-5 bg-slate-200" />
+                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-7 object-contain" />
               </div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
-                  <Sparkles className="w-4.5 h-4.5 text-white" />
-                </div>
-                <div>
-                  <span className="text-white font-bold text-base block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                  <span className="text-red-400/80 text-[9px] font-semibold tracking-[0.2em] uppercase">2026</span>
-                </div>
+              <div>
+                <span className="text-white font-bold text-base block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
+                <span className="text-red-400/80 text-[9px] font-semibold tracking-[0.2em] uppercase">2026</span>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-5">

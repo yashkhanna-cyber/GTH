@@ -63,14 +63,10 @@ export default function AdminLoginPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3.5 mb-6 group">
-              <div className="flex items-center gap-2">
-                <div className="h-12 px-3 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
-                  <img src="/gth-logo.jpg" alt="GTH Logo" className="h-8 object-contain" />
-                </div>
-                <span className="text-white/30 text-xl font-light">|</span>
-                <div className="h-12 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all">
-                  <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-8 object-contain" />
-                </div>
+              <div className="h-13 px-4 py-1.5 rounded-2xl bg-white flex items-center gap-3 shadow-lg shadow-red-500/5 group-hover:shadow-red-500/20 transition-all border border-slate-100">
+                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-8.5 object-contain" />
+                <div className="h-6 w-px bg-slate-200" />
+                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-8.5 object-contain" />
               </div>
               <div className="text-left">
                 <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH Admin</span>

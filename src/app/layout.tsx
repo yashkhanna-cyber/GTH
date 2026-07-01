@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "GTH TechVerse 2026 | Future Skills Bootcamp",
   description: "Geeta Technical Hub's flagship 3-day bootcamp covering AI, IoT, Cybersecurity, and more. Build real projects, earn certificates, and compete on the leaderboard.",
   keywords: ["GTH", "TechVerse", "Bootcamp", "AI", "IoT", "Cybersecurity", "Geeta University"],
+  icons: {
+    icon: "/icon.svg",
+  }
 };
 
 export default function RootLayout({

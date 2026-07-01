@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Trophy, Search, Loader2, X, GraduationCap, Award, Calendar, ChevronRight, AlertCircle, CheckCircle2, History, Send, ClipboardList, Plus, Minus } from 'lucide-react'
+import { Trophy, Search, Loader2, X, GraduationCap, Award, Calendar, ChevronRight, AlertCircle, CheckCircle2, History, Send, ClipboardList, Plus, Minus, Users } from 'lucide-react'
 
 interface LeaderboardEntry {
   id: string
@@ -20,8 +20,20 @@ interface LeaderboardEntry {
     user: {
       name: string
       email: string
+      avatar?: string | null
     }
   }
+}
+
+interface TeamEntry {
+  rank: number
+  teamName: string
+  totalPoints: number
+  memberCount: number
+  members: {
+    name: string
+    avatar: string | null
+  }[]
 }
 
 interface ScoreLog {
@@ -47,6 +59,8 @@ interface TaskSubmission {
 
 export default function AdminLeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [teams, setTeams] = useState<TeamEntry[]>([])
+  const [activeTab, setActiveTab] = useState<'individual' | 'teams'>('individual')
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
 
@@ -73,6 +87,7 @@ export default function AdminLeaderboardPage() {
       .then(r => r.json())
       .then(data => {
         if (data.leaderboard) setLeaderboard(data.leaderboard)
+        if (data.teamsLeaderboard) setTeams(data.teamsLeaderboard)
       })
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
@@ -160,7 +175,11 @@ export default function AdminLeaderboardPage() {
 
   const filteredLeaderboard = leaderboard.filter(entry =>
     entry.student.user.name.toLowerCase().includes(search.toLowerCase()) ||
-    entry.student.enrollmentNo.toLowerCase().includes(search.toLowerCase())
+    (entry.student.enrollmentNo || '').toLowerCase().includes(search.toLowerCase())
+  )
+
+  const filteredTeams = teams.filter(t =>
+    t.teamName.toLowerCase().includes(search.toLowerCase())
   )
 
   if (loading) {
@@ -175,12 +194,36 @@ export default function AdminLeaderboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
-          <Trophy className="w-6 h-6 text-red-400" />
-          Leaderboard & Students Analytics
-        </h1>
-        <p className="text-sm text-slate-400 mt-1">Review student performance, view historical task submissions, and manually adjust points.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2" style={{ fontFamily: 'var(--font-display)' }}>
+            <Trophy className="w-6 h-6 text-red-400" />
+            Leaderboard & Students Analytics
+          </h1>
+          <p className="text-sm text-slate-400 mt-1">Review performance, view historical task submissions, and manually adjust points.</p>
+        </div>
+
+        {/* Tab Switcher */}
+        <div className="flex bg-slate-900/60 p-1 rounded-xl border border-slate-800 shrink-0">
+          <button
+            onClick={() => { setActiveTab('individual'); setSearch(''); }}
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'individual' ? 'bg-red-500 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Trophy className="w-3.5 h-3.5" />
+            Students
+          </button>
+          <button
+            onClick={() => { setActiveTab('teams'); setSearch(''); }}
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'teams' ? 'bg-red-500 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            Teams
+          </button>
+        </div>
       </div>
 
       {/* Search Input */}
@@ -189,71 +232,129 @@ export default function AdminLeaderboardPage() {
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by student name or enrollment..."
+          placeholder={activeTab === 'individual' ? "Search by student name..." : "Search by team name..."}
           className="bg-transparent text-sm text-white placeholder-slate-550 outline-none w-full"
         />
       </div>
 
-      {/* Leaderboard Table */}
-      <div className="rounded-2xl bg-[#0b1120] border border-slate-800/60 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="border-b border-slate-800 text-slate-550 font-semibold">
-                <th className="px-5 py-4 font-semibold">Rank</th>
-                <th className="px-5 py-4 font-semibold">Student</th>
-                <th className="px-5 py-4 font-semibold">Team</th>
-                <th className="px-5 py-4 text-right font-semibold">Project XP</th>
-                <th className="px-5 py-4 text-right font-semibold">Community XP</th>
-                <th className="px-5 py-4 text-right font-semibold">Referrals</th>
-                <th className="px-5 py-4 text-right font-semibold">Total XP</th>
-                <th className="px-5 py-4 text-right font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLeaderboard.map((entry) => (
-                <tr key={entry.id} className="border-b border-slate-800/50 hover:bg-slate-900/10 transition-colors">
-                  <td className="px-5 py-3.5 font-bold font-mono text-slate-400">
-                    {entry.rank <= 3 ? (
-                      <span className="inline-flex w-6 h-6 rounded bg-red-500/10 text-red-400 items-center justify-center text-[10px]">
-                        {entry.rank}
-                      </span>
-                    ) : (
-                      <span>{entry.rank}</span>
-                    )}
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 font-bold text-[10px]">
-                        {getInitials(entry.student.user.name)}
-                      </div>
-                      <div>
-                        <p className="text-white font-semibold text-xs leading-tight">{entry.student.user.name}</p>
-                        <p className="text-[9px] text-slate-500 font-mono mt-0.5">{entry.student.enrollmentNo}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-3.5 text-slate-400">
-                    {entry.student.team?.name || '—'}
-                  </td>
-                  <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.projectScore} XP</td>
-                  <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.communityScore} XP</td>
-                  <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.referralScore} XP</td>
-                  <td className="px-5 py-3.5 text-right font-bold text-red-400 font-mono">{entry.totalPoints} XP</td>
-                  <td className="px-5 py-3.5 text-right">
-                    <button
-                      onClick={() => setSelectedStudentId(entry.student.id)}
-                      className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 font-bold transition-all"
-                    >
-                      Analyze Profile <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </td>
+      {activeTab === 'individual' ? (
+        /* Leaderboard Table */
+        <div className="rounded-2xl bg-[#0b1120] border border-slate-800/60 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 text-slate-550 font-semibold">
+                  <th className="px-5 py-4 font-semibold">Rank</th>
+                  <th className="px-5 py-4 font-semibold">Student</th>
+                  <th className="px-5 py-4 font-semibold">Team</th>
+                  <th className="px-5 py-4 text-right font-semibold">Project XP</th>
+                  <th className="px-5 py-4 text-right font-semibold">Community XP</th>
+                  <th className="px-5 py-4 text-right font-semibold">Referrals</th>
+                  <th className="px-5 py-4 text-right font-semibold">Total XP</th>
+                  <th className="px-5 py-4 text-right font-semibold">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredLeaderboard.map((entry) => (
+                  <tr key={entry.id} className="border-b border-slate-800/50 hover:bg-slate-900/10 transition-colors">
+                    <td className="px-5 py-3.5 font-bold font-mono text-slate-400">
+                      {entry.rank <= 3 ? (
+                        <span className="inline-flex w-6 h-6 rounded bg-red-500/10 text-red-400 items-center justify-center text-[10px]">
+                          {entry.rank}
+                        </span>
+                      ) : (
+                        <span>{entry.rank}</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-700 bg-red-500/10 flex items-center justify-center text-red-400 font-bold text-[10px]">
+                          {entry.student.user.avatar ? (
+                            <img src={entry.student.user.avatar} alt={entry.student.user.name} className="w-full h-full object-cover" />
+                          ) : (
+                            getInitials(entry.student.user.name)
+                          )}
+                        </div>
+                        <div>
+                          <p className="text-white font-semibold text-xs leading-tight">{entry.student.user.name}</p>
+                          <p className="text-[9px] text-slate-500 font-mono mt-0.5">{entry.student.enrollmentNo}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-400">
+                      {entry.student.team?.name || '—'}
+                    </td>
+                    <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.projectScore} XP</td>
+                    <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.communityScore} XP</td>
+                    <td className="px-5 py-3.5 text-right font-mono text-slate-350">{entry.referralScore} XP</td>
+                    <td className="px-5 py-3.5 text-right font-bold text-red-400 font-mono">{entry.totalPoints} XP</td>
+                    <td className="px-5 py-3.5 text-right">
+                      <button
+                        onClick={() => setSelectedStudentId(entry.student.id)}
+                        className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 font-bold transition-all"
+                      >
+                        Analyze Profile <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        /* Teams Table */
+        <div className="rounded-2xl bg-[#0b1120] border border-slate-800/60 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-slate-800 text-slate-550 font-semibold">
+                  <th className="px-5 py-4 font-semibold">Rank</th>
+                  <th className="px-5 py-4 font-semibold">Team Name</th>
+                  <th className="px-5 py-4 font-semibold">Members Count</th>
+                  <th className="px-5 py-4 font-semibold">Top Members</th>
+                  <th className="px-5 py-4 text-right font-semibold">Total Team XP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTeams.map((t) => (
+                  <tr key={t.teamName} className="border-b border-slate-800/50 hover:bg-slate-900/10 transition-colors">
+                    <td className="px-5 py-3.5 font-bold font-mono text-slate-400">
+                      {t.rank <= 3 ? (
+                        <span className="inline-flex w-6 h-6 rounded bg-red-500/10 text-red-400 items-center justify-center text-[10px]">
+                          {t.rank}
+                        </span>
+                      ) : (
+                        <span>{t.rank}</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3.5 font-bold text-white">
+                      {t.teamName}
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-400">
+                      {t.memberCount} Students
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex -space-x-2 overflow-hidden">
+                        {t.members.map((m, idx) => (
+                          <div key={idx} className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-900 bg-red-500/10 flex items-center justify-center text-[8px] text-red-400 font-bold overflow-hidden" title={m.name}>
+                            {m.avatar ? (
+                              <img src={m.avatar} alt={m.name} className="h-full w-full object-cover" />
+                            ) : (
+                              m.name.split(' ').map(n => n[0]).join('').substring(0, 1).toUpperCase()
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 text-right font-bold text-red-400 font-mono">{t.totalPoints} XP</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Student Profile Drawer / Modal */}
       {selectedStudentId && (

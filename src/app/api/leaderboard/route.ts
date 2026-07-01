@@ -61,7 +61,52 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json({ leaderboard })
+    // 4. Calculate Team Leaderboard (Group students by team and sum points)
+    const { data: allStudents, error: allStudentsError } = await supabaseAdmin
+      .from('users')
+      .select('id, full_name, team, total_points, photo')
+      .eq('role', 'Student')
+
+    const teamMap: Record<string, { teamName: string; totalPoints: number; memberCount: number; members: { name: string; avatar: string | null }[] }> = {}
+    
+    if (!allStudentsError && allStudents) {
+      for (const s of allStudents) {
+        if (s.team) {
+          const tName = s.team.trim()
+          if (!teamMap[tName]) {
+            teamMap[tName] = {
+              teamName: tName,
+              totalPoints: 0,
+              memberCount: 0,
+              members: []
+            }
+          }
+          teamMap[tName].totalPoints += s.total_points || 0
+          teamMap[tName].memberCount += 1
+          if (teamMap[tName].members.length < 5) {
+            teamMap[tName].members.push({
+              name: s.full_name,
+              avatar: s.photo || null
+            })
+          }
+        }
+      }
+    }
+
+    const teamLeaderboard = Object.values(teamMap)
+      .sort((a, b) => b.totalPoints - a.totalPoints)
+      .map((t, index) => ({
+        rank: index + 1,
+        teamName: t.teamName,
+        totalPoints: t.totalPoints,
+        memberCount: t.memberCount,
+        members: t.members
+      }))
+
+    return NextResponse.json({ 
+      leaderboard,
+      teamsLeaderboard: teamLeaderboard
+    })
   } catch (error) {
     console.error('Leaderboard error:', error)
     return NextResponse.json({ error: 'Failed to fetch leaderboard data' }, { status: 500 })

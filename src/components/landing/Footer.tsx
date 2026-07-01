@@ -16,14 +16,20 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="mb-4">
-              <div className="inline-flex p-2.5 rounded-xl bg-white mb-4 shadow-md border border-slate-100 items-center gap-2">
-                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
-                <div className="w-px h-5 bg-slate-200" />
-                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-7 object-contain" />
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="h-9 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-lg">
+                  <img src="/gth-logo.jpg" alt="GTH Logo" className="h-6 object-contain" />
+                </div>
+                <div>
+                  <span className="text-white font-bold text-base block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
+                  <span className="text-red-400/80 text-[9px] font-semibold tracking-[0.2em] uppercase">2026</span>
+                </div>
               </div>
-              <div>
-                <span className="text-white font-bold text-base block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-red-400/80 text-[9px] font-semibold tracking-[0.2em] uppercase">2026</span>
+              <div className="mt-4">
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1.5">Organized By</span>
+                <div className="inline-flex h-8 px-2.5 bg-white rounded-lg items-center justify-center shadow-sm">
+                  <img src="/geeta-logo.png" alt="Geeta University" className="h-5.5 object-contain" />
+                </div>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-5">

@@ -59,18 +59,21 @@ export default function LoginPage() {
       <div className="relative z-10 w-full flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-3.5 mb-6">
-              <div className="h-13 px-4 py-1.5 rounded-2xl bg-white flex items-center gap-3 shadow-lg shadow-red-500/5 border border-slate-100">
-                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-8.5 object-contain" />
-                <div className="h-6 w-px bg-slate-200" />
-                <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-8.5 object-contain" />
+          <div className="text-center mb-8 flex flex-col items-center">
+            <Link href="/" className="inline-flex items-center gap-3 mb-3">
+              <div className="h-10 px-3 rounded-xl bg-white flex items-center justify-center shadow-lg">
+                <img src="/gth-logo.jpg" alt="GTH Logo" className="h-7 object-contain" />
               </div>
-              <div className="text-left">
-                <span className="text-white font-bold text-xl block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH TechVerse</span>
-                <span className="text-red-400/80 text-[10px] font-semibold tracking-[0.2em] uppercase">2026</span>
+              <div className="text-left font-bold text-xl text-white tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+                GTH TechVerse
               </div>
             </Link>
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">under the aegis of</span>
+              <div className="h-5 px-1.5 bg-white rounded flex items-center justify-center shadow-sm">
+                <img src="/geeta-logo.png" alt="Geeta University" className="h-3.5 object-contain" />
+              </div>
+            </div>
             <h1 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
               Welcome Back
             </h1>

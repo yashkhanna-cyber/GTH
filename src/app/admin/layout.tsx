@@ -55,15 +55,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
         <div className="p-5 flex items-center justify-between">
-          <Link href="/admin" className="flex items-center gap-2">
-            <div className="h-9 px-2 rounded-lg bg-white flex items-center gap-1.5 shadow-sm border border-slate-800/10">
-              <img src="/gth-logo.jpg" alt="GTH Logo" className="h-5.5 object-contain" />
-              <div className="w-px h-4 bg-slate-200" />
-              <img src="/geeta-logo.png" alt="Geeta University" className="h-5.5 object-contain" />
+          <Link href="/admin" className="flex items-center gap-2.5">
+            <div className="h-9 px-2.5 rounded-xl bg-white flex items-center justify-center shadow-sm">
+              <img src="/gth-logo.jpg" alt="GTH Logo" className="h-6 object-contain" />
             </div>
-            <div className="min-w-0">
-              <span className="text-white font-bold text-xs block leading-tight truncate" style={{ fontFamily: 'var(--font-display)' }}>GTH Admin</span>
-              <span className="text-red-400 text-[8px] font-semibold tracking-[0.1em] uppercase">Control Panel</span>
+            <div>
+              <span className="text-white font-bold text-sm block leading-tight" style={{ fontFamily: 'var(--font-display)' }}>GTH Admin</span>
+              <span className="text-red-400 text-[9px] font-semibold tracking-[0.15em] uppercase">Control Panel</span>
             </div>
           </Link>
           <button className="lg:hidden text-slate-400 p-1" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar"><X className="w-5 h-5" /></button>
@@ -84,7 +82,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-3 border-t border-slate-800/50">
+        <div className="p-4 border-t border-slate-800/50 flex flex-col gap-3.5">
+          {/* Organized By */}
+          <div className="p-2.5 rounded-xl border bg-white/5 border-white/5 flex flex-col items-center gap-1.5">
+            <span className="text-[8px] text-slate-550 font-bold uppercase tracking-wider block">Organized By</span>
+            <div className="h-7 px-2.5 bg-white rounded-lg flex items-center justify-center shadow-sm">
+              <img src="/geeta-logo.png" alt="Geeta University Logo" className="h-5 object-contain" />
+            </div>
+          </div>
+
           <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium w-full text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer">
             <LogOut className="w-4.5 h-4.5" /> Logout
           </button>

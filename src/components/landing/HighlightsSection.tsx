@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Trophy, Users, Wrench, BookOpen, Rocket, Monitor, Award, Clock } from 'lucide-react'
 
 const highlights = [
-  { icon: Trophy, title: '₹50K+ Prizes', desc: 'Win cash prizes, gadgets, and exclusive goodies', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+  { icon: Trophy, title: 'Competition & Glory', desc: 'Compete on the leaderboard and showcase your skills to win glory', color: 'text-amber-400', bg: 'bg-amber-500/10' },
   { icon: Users, title: '200+ Students', desc: 'Network with passionate peers from all departments', color: 'text-blue-400', bg: 'bg-blue-500/10' },
   { icon: Wrench, title: 'Hardware Lab', desc: 'ESP32, sensors, servos, cameras — all provided', color: 'text-green-400', bg: 'bg-green-500/10' },
   { icon: BookOpen, title: '4 Major Projects', desc: 'Build gesture-controlled servos, AI face RGB, and more', color: 'text-purple-400', bg: 'bg-purple-500/10' },

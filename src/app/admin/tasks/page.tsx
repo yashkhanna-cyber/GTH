@@ -254,9 +254,27 @@ export default function AdminTasksPage() {
   }
 
   const renderFilePreview = (filePath: string) => {
-    const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase()
-    const isImage = ['.png', '.jpg', '.jpeg', '.gif'].includes(ext)
-    const isPdf = ext === '.pdf'
+    if (!filePath) return null
+
+    let isImage = false
+    let isPdf = false
+    let displayExt = ''
+
+    if (filePath.startsWith('data:')) {
+      try {
+        const mime = filePath.split(';')[0].split(':')[1]
+        isImage = mime.startsWith('image/')
+        isPdf = mime === 'application/pdf'
+        displayExt = mime.split('/')[1] || 'file'
+      } catch (e) {
+        console.error('Failed to parse base64 mime type:', e)
+      }
+    } else {
+      const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase()
+      isImage = ['.png', '.jpg', '.jpeg', '.gif'].includes(ext)
+      isPdf = ext === '.pdf'
+      displayExt = ext.replace('.', '')
+    }
 
     if (isImage) {
       return (
@@ -269,7 +287,9 @@ export default function AdminTasksPage() {
     if (isPdf) {
       return (
         <div className="rounded-xl overflow-hidden border border-slate-800 bg-slate-900 h-[500px]">
-          <iframe src={`${filePath}#toolbar=1`} className="w-full h-full border-0" title="PDF submission viewer" />
+          <object data={filePath} type="application/pdf" className="w-full h-full border-0">
+            <iframe src={filePath} className="w-full h-full border-0" title="PDF submission viewer" />
+          </object>
         </div>
       )
     }
@@ -278,8 +298,8 @@ export default function AdminTasksPage() {
       <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-8 text-center flex flex-col items-center justify-center gap-3">
         <FileText className="w-12 h-12 text-slate-650" />
         <h4 className="text-white font-bold text-sm">Download Needed for Preview</h4>
-        <p className="text-slate-500 text-xs max-w-xs leading-relaxed">
-          This file type ({ext.toUpperCase()}) cannot be rendered inline. Click the button above to download and review it locally.
+        <p className="text-slate-500 text-xs max-w-xs leading-relaxed font-mono break-all">
+          This file type ({displayExt.toUpperCase()}) cannot be rendered inline. Click the button above to download and review it locally.
         </p>
       </div>
     )
@@ -461,29 +481,46 @@ export default function AdminTasksPage() {
 
           {/* Submission Details and Review controls */}
           <div className="lg:col-span-7 space-y-6">
-            {selectedSub ? (
-              <div className="space-y-6">
-                {/* Header info */}
-                <div className="rounded-2xl bg-[#0b1120] border border-slate-800/60 p-6 space-y-4">
-                  <div className="border-b border-slate-800/80 pb-4 flex justify-between items-start gap-4">
-                    <div>
-                      <p className="text-[10px] text-red-400 font-bold uppercase tracking-wider">Reviewing work submission</p>
-                      <h3 className="text-white font-bold text-lg leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
-                        {selectedSub.student.user.name}
-                      </h3>
-                      <p className="text-xs text-slate-400 mt-1">
-                        Enrollment: {selectedSub.student.enrollmentNo} {selectedSub.student.batch ? `• Batch: ${selectedSub.student.batch}` : ''}
-                      </p>
-                    </div>
+            {selectedSub ? (() => {
+              const getDisplayExt = (filePath: string) => {
+                if (filePath.startsWith('data:')) {
+                  try {
+                    const mime = filePath.split(';')[0].split(':')[1]
+                    return mime.split('/')[1] || 'file'
+                  } catch (e) {
+                    return 'file'
+                  }
+                }
+                return filePath.substring(filePath.lastIndexOf('.')).replace('.', '').toLowerCase()
+              }
+              const displayExt = getDisplayExt(selectedSub.uploadedFile)
+              const downloadName = `submission_${selectedSub.student.user.name.replace(/\s+/g, '_')}_task.${displayExt}`
 
-                    <a
-                      href={selectedSub.uploadedFile}
-                      download
-                      className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 font-semibold bg-red-500/10 px-3 py-1.5 rounded-lg border border-red-500/20 transition-all shrink-0"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" /> Download File
-                    </a>
-                  </div>
+              return (
+                <div className="space-y-6">
+                  {/* Header info */}
+                  <div className="rounded-2xl bg-[#0b1120] border border-slate-800/60 p-6 space-y-4">
+                    <div className="border-b border-slate-800/80 pb-4 flex justify-between items-start gap-4">
+                      <div>
+                        <p className="text-[10px] text-red-400 font-bold uppercase tracking-wider">Reviewing work submission</p>
+                        <h3 className="text-white font-bold text-lg leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+                          {selectedSub.student.user.name}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-1">
+                          Enrollment: {selectedSub.student.enrollmentNo} {selectedSub.student.batch ? `• Batch: ${selectedSub.student.batch}` : ''}
+                        </p>
+                      </div>
+
+                      <a
+                        href={selectedSub.uploadedFile}
+                        download={downloadName}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 font-semibold bg-red-500/10 px-3 py-1.5 rounded-lg border border-red-500/20 transition-all shrink-0"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" /> Download File
+                      </a>
+                    </div>
 
                   <div>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Task</p>
@@ -609,8 +646,8 @@ export default function AdminTasksPage() {
                     </button>
                   </form>
                 </div>
-              </div>
-            ) : (
+              )
+            })() : (
               <div className="rounded-2xl border border-slate-800/60 bg-slate-900/10 p-16 text-center">
                 <ShieldAlert className="w-12 h-12 text-slate-750 mx-auto mb-3" />
                 <h4 className="text-white font-bold text-sm">No Submission Selected</h4>

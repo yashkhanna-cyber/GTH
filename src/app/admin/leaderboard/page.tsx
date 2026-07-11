@@ -140,12 +140,13 @@ export default function AdminLeaderboardPage() {
     setAdjSuccess(null)
 
     try {
-      const res = await fetch(`/api/admin/students/${selectedStudentId}`, {
+      const res = await fetch(`/api/admin/points`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          studentId: selectedStudentId,
           amount: Number(adjPoints),
-          type: adjType,
+          type: adjType === 'SUBTRACT' ? 'DEDUCT' : adjType,
           reason: adjReason
         })
       })

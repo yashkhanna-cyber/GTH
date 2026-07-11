@@ -97,12 +97,13 @@ export default function PointsAdmin() {
     setSubmitting(true)
 
     try {
-      const res = await fetch(`/api/admin/students/${selectedStudent.id}`, {
+      const res = await fetch(`/api/admin/points`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          studentId: selectedStudent.id,
           amount: Math.abs(pointsNum),
-          type: pointsNum >= 0 ? 'ADD' : 'SUBTRACT',
+          type: pointsNum >= 0 ? 'ADD' : 'DEDUCT',
           reason: form.reason,
           category: form.category
         })

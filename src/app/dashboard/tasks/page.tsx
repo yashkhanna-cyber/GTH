@@ -236,20 +236,31 @@ export default function TasksPage() {
     setError(null)
     setSuccess(null)
 
-    const formData = new FormData()
-    formData.append('taskId', selectedTask.id)
-    formData.append('comments', comments)
-    formData.append('file', file)
+    const toBase64 = (f: File): Promise<string> => new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(f)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = error => reject(error)
+    })
 
     try {
+      const base64File = await toBase64(file)
+      
+      const payload = {
+        taskId: selectedTask.id,
+        comment: comments || null,
+        uploadedFile: base64File
+      }
+
       const res = await fetch('/api/tasks/submissions', {
         method: 'POST',
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       })
       const data = await res.json()
 
-      if (data.error) {
-        setError(data.error)
+      if (data.error || (res.status >= 400 && data.detail)) {
+        setError(data.error || data.detail || 'Failed to submit task')
       } else {
         setSuccess('Task submitted successfully!')
         setFile(null)
@@ -260,7 +271,8 @@ export default function TasksPage() {
           setSuccess(null)
         }, 1500)
       }
-    } catch {
+    } catch (err) {
+      console.error(err)
       setError('Failed to submit task. Please try again.')
     } finally {
       setSubmitting(false)

@@ -131,27 +131,39 @@ export default function AdminTasksPage() {
     setFormError(null)
     setFormSuccess(null)
 
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('description', description)
-    formData.append('rules', rules)
-    formData.append('points', points.toString())
-    formData.append('deadline', deadline)
-    formData.append('assignedTo', assignedTo)
-    formData.append('assignedTarget', assignedTarget)
-    if (file) {
-      formData.append('file', file)
-    }
+    const toBase64 = (f: File): Promise<string> => new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(f)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = error => reject(error)
+    })
 
     try {
+      let base64File = null
+      if (file) {
+        base64File = await toBase64(file)
+      }
+
+      const payload = {
+        title: name,
+        description,
+        rules,
+        points,
+        deadline: deadline ? new Date(deadline).toISOString() : new Date().toISOString(),
+        referenceFile: base64File,
+        assignedTo,
+        assignedTarget: assignedTo === 'ALL' ? null : assignedTarget
+      }
+
       const res = await fetch('/api/tasks', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       })
       const data = await res.json()
 
-      if (data.error) {
-        setFormError(data.error)
+      if (data.error || (res.status >= 400 && data.detail)) {
+        setFormError(data.error || data.detail || 'Failed to create task')
       } else {
         setFormSuccess('Task created and assigned successfully!')
         setName('')
@@ -168,7 +180,8 @@ export default function AdminTasksPage() {
           setFormSuccess(null)
         }, 1500)
       }
-    } catch {
+    } catch (err) {
+      console.error(err)
       setFormError('Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)

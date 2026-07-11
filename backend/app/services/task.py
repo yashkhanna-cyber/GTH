@@ -105,7 +105,7 @@ class TaskService:
         file_upload_id = None
         
         try:
-            filename = f"task_{task.id[:8]}_{student.enrollment_no or 'sub'}.zip"
+            filename = f"task_{str(task.id)[:8]}_{student.enrollment_no or 'sub'}.zip"
             mime_type = "application/zip"
 
             if "," in data.uploadedFile:
@@ -116,6 +116,7 @@ class TaskService:
                 filename = f"task_{str(task.id)[:8]}_{student.enrollment_no or 'sub'}.{ext}"
             else:
                 base64_str = data.uploadedFile
+                mime_type = "application/octet-stream"
 
             file_bytes = base64.b64decode(base64_str)
             file_like = BytesIO(file_bytes)
@@ -137,10 +138,19 @@ class TaskService:
 
         except Exception as e:
             logger.error(f"File upload error for submission: {e}")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Failed to upload file submission"
-            )
+            if "Read-only" in str(e) or "Read-only file system" in str(e) or isinstance(e, OSError):
+                logger.info("Falling back to Base64 storage in database due to read-only filesystem.")
+                file_url = f"data:{mime_type};base64,{base64_str}"
+            elif "Bucket not found" in str(e):
+                 raise HTTPException(
+                     status_code=status.HTTP_400_BAD_REQUEST,
+                     detail="Supabase Error: Please create a public bucket named 'task-submissions' in your Supabase storage."
+                 )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Upload Failed: {str(e)}"
+                )
 
         # 4. Upsert submission
         res_sub = await db.execute(

@@ -49,7 +49,7 @@ class StudentSubmissionSummary(BaseModel):
 
 class TaskResponse(BaseModel):
     id: uuid.UUID
-    title: str
+    name: str
     description: str
     rules: Optional[str] = None
     points: int
@@ -62,3 +62,12 @@ class TaskResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class TaskTeamResponse(BaseModel):
+    id: uuid.UUID
+    name: str
+
+class TaskListResponse(BaseModel):
+    success: bool = True
+    tasks: List[TaskResponse]
+    teams: Optional[List[TaskTeamResponse]] = None

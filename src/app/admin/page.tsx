@@ -12,10 +12,9 @@ const statusColors: Record<string, string> = {
 interface StatsData {
   totalStudents: number
   activeTeams: number
-  submissions: number
-  activeChallenges: number
-  totalPoints: number
-  attendanceRate: string
+  averageXp: number
+  pendingSubmissions: number
+  attendanceRate: number
 }
 
 interface Submission {
@@ -51,12 +50,11 @@ export default function AdminOverview() {
   }
 
   const statCards = stats ? [
-    { label: 'Total Students', value: stats.totalStudents.toString(), icon: Users, color: 'from-blue-500 to-indigo-500', change: 'Total enrolled' },
-    { label: 'Active Teams', value: stats.activeTeams.toString(), icon: Trophy, color: 'from-red-500 to-amber-500', change: 'Teams formed' },
-    { label: 'Submissions', value: stats.submissions.toString(), icon: FileCheck, color: 'from-emerald-500 to-green-500', change: 'Files uploaded' },
-    { label: 'Active Challenges', value: stats.activeChallenges.toString(), icon: Zap, color: 'from-purple-500 to-indigo-500', change: 'Bootcamp tasks' },
-    { label: 'Total Points Given', value: stats.totalPoints.toLocaleString(), icon: BarChart3, color: 'from-cyan-500 to-blue-500', change: 'Distributed XP' },
-    { label: 'Attendance Rate', value: stats.attendanceRate, icon: Activity, color: 'from-pink-500 to-rose-500', change: 'Overall present' },
+    { label: 'Total Students', value: (stats.totalStudents || 0).toString(), icon: Users, color: 'from-blue-500 to-indigo-500', change: 'Total enrolled' },
+    { label: 'Active Teams', value: (stats.activeTeams || 0).toString(), icon: Trophy, color: 'from-red-500 to-amber-500', change: 'Teams formed' },
+    { label: 'Pending Submissions', value: (stats.pendingSubmissions || 0).toString(), icon: FileCheck, color: 'from-emerald-500 to-green-500', change: 'Awaiting review' },
+    { label: 'Average XP', value: (stats.averageXp || 0).toString(), icon: Zap, color: 'from-purple-500 to-indigo-500', change: 'Per student' },
+    { label: 'Attendance Rate', value: `${stats.attendanceRate || 0}%`, icon: Activity, color: 'from-pink-500 to-rose-500', change: 'Overall present' },
   ] : []
 
   return (

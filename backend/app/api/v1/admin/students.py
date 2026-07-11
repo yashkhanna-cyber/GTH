@@ -36,14 +36,14 @@ async def get_all_students(db: AsyncSession = Depends(get_db), admin: User = Dep
     for s in students:
         formatted.append({
             "id": str(s.id),
-            "fullName": s.full_name,
+            "name": s.full_name,
             "email": s.email,
-            "enrollmentNo": s.enrollment_no or "",
+            "enrollment": s.enrollment_no or "",
             "branch": s.branch or "",
             "year": s.year,
             "batch": s.batch or "",
             "team": s.team or "",
-            "totalPoints": s.total_points,
+            "points": s.total_points,
             "photo": s.photo
         })
     return {"success": True, "students": formatted}

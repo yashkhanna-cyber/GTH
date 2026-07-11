@@ -19,5 +19,5 @@ async def get_leaderboard(db: AsyncSession = Depends(get_db), current_user = Dep
     return {
         "success": True,
         "leaderboard": leaderboard,
-        "teamLeaderboard": team_leaderboard
+        "teamsLeaderboard": team_leaderboard
     }

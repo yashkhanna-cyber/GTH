@@ -82,43 +82,60 @@ async def recalculate_leaderboard_task():
     async with async_session_maker() as session:
         # Individual leaderboard query (Students only, ordered by points)
         res = await session.execute(
-            select(User.id, User.full_name, User.enrollment_no, User.team, User.total_points)
+            select(User)
             .where(User.role == "Student")
             .order_by(User.total_points.desc(), User.full_name.asc())
         )
-        students = res.all()
+        students = res.scalars().all()
         
         leaderboard_data = []
         for idx, student in enumerate(students):
             leaderboard_data.append({
-                "rank": idx + 1,
                 "id": str(student.id),
-                "name": student.full_name,
-                "enrollmentNo": student.enrollment_no or "",
-                "team": student.team or "",
-                "points": student.total_points
+                "rank": idx + 1,
+                "totalPoints": student.total_points,
+                "projectScore": student.total_points,
+                "communityScore": 0,
+                "innovationScore": 0,
+                "referralScore": 0,
+                "student": {
+                    "id": str(student.id),
+                    "enrollmentNo": student.enrollment_no or "",
+                    "team": {"name": student.team} if student.team else None,
+                    "user": {
+                        "name": student.full_name,
+                        "email": student.email,
+                        "avatar": student.photo
+                    }
+                }
             })
 
         # Save to Redis (expire in 1 hour)
         await redis_service.set_json("cache:leaderboard:individual", leaderboard_data, expire=3600)
 
-        # Team leaderboard aggregation query
-        # Sum user points grouped by team name
-        res_team = await session.execute(
-            select(User.team, func.sum(User.total_points).label("team_points"))
-            .where(User.role == "Student")
-            .where(User.team != None)
-            .group_by(User.team)
-            .order_by(func.sum(User.total_points).desc())
-        )
-        teams = res_team.all()
+        # Team leaderboard - group students by team
+        teams_map: dict[str, dict] = {}
+        for s in students:
+            if not s.team:
+                continue
+            if s.team not in teams_map:
+                teams_map[s.team] = {"totalPoints": 0, "members": []}
+            teams_map[s.team]["totalPoints"] += s.total_points
+            teams_map[s.team]["members"].append({
+                "name": s.full_name,
+                "avatar": s.photo
+            })
+
+        sorted_teams = sorted(teams_map.items(), key=lambda x: x[1]["totalPoints"], reverse=True)
 
         team_leaderboard = []
-        for idx, team in enumerate(teams):
+        for idx, (team_name, data) in enumerate(sorted_teams):
             team_leaderboard.append({
                 "rank": idx + 1,
-                "name": team.team,
-                "points": int(team.team_points or 0)
+                "teamName": team_name,
+                "totalPoints": data["totalPoints"],
+                "memberCount": len(data["members"]),
+                "members": data["members"][:5]
             })
 
         await redis_service.set_json("cache:leaderboard:team", team_leaderboard, expire=3600)

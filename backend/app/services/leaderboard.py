@@ -12,6 +12,9 @@ class LeaderboardService:
         """
         Retrieves individual student leaderboard rankings.
         Pulls from Redis cache first, falls back to Postgres.
+        Response format matches frontend LeaderboardEntry interface:
+        { id, rank, totalPoints, projectScore, communityScore, innovationScore, referralScore,
+          student: { id, enrollmentNo, team: { name } | null, user: { name, email, avatar } } }
         """
         cache_key = "cache:leaderboard:individual"
         cached = await redis_service.get_json(cache_key)
@@ -20,21 +23,32 @@ class LeaderboardService:
 
         logger.info("Leaderboard cache miss. Querying individual leaderboard from database.")
         res = await db.execute(
-            select(User.id, User.full_name, User.enrollment_no, User.team, User.total_points)
+            select(User)
             .where(User.role == "Student")
             .order_by(User.total_points.desc(), User.full_name.asc())
         )
-        students = res.all()
+        students = res.scalars().all()
         
         leaderboard_data = []
         for idx, student in enumerate(students):
             leaderboard_data.append({
-                "rank": idx + 1,
                 "id": str(student.id),
-                "name": student.full_name,
-                "enrollmentNo": student.enrollment_no or "",
-                "team": student.team or "",
-                "points": student.total_points
+                "rank": idx + 1,
+                "totalPoints": student.total_points,
+                "projectScore": student.total_points,  # All points aggregated
+                "communityScore": 0,
+                "innovationScore": 0,
+                "referralScore": 0,
+                "student": {
+                    "id": str(student.id),
+                    "enrollmentNo": student.enrollment_no or "",
+                    "team": {"name": student.team} if student.team else None,
+                    "user": {
+                        "name": student.full_name,
+                        "email": student.email,
+                        "avatar": student.photo
+                    }
+                }
             })
 
         # Cache results in Redis
@@ -44,7 +58,8 @@ class LeaderboardService:
     async def get_team_leaderboard(self, db: AsyncSession) -> List[Dict[str, Any]]:
         """
         Retrieves team leaderboard rankings (sum of user points).
-        Pulls from Redis cache first, falls back to Postgres.
+        Response format matches frontend TeamEntry interface:
+        { rank, teamName, totalPoints, memberCount, members: [{ name, avatar }] }
         """
         cache_key = "cache:leaderboard:team"
         cached = await redis_service.get_json(cache_key)
@@ -52,21 +67,39 @@ class LeaderboardService:
             return cached
 
         logger.info("Leaderboard cache miss. Querying team leaderboard from database.")
-        res_team = await db.execute(
-            select(User.team, func.sum(User.total_points).label("team_points"))
+        
+        # Get all students with teams
+        res_students = await db.execute(
+            select(User)
             .where(User.role == "Student")
             .where(User.team != None)
-            .group_by(User.team)
-            .order_by(func.sum(User.total_points).desc())
+            .order_by(User.total_points.desc())
         )
-        teams = res_team.all()
+        all_students = res_students.scalars().all()
+
+        # Group by team
+        teams_map: dict[str, dict] = {}
+        for s in all_students:
+            team_name = s.team
+            if team_name not in teams_map:
+                teams_map[team_name] = {"totalPoints": 0, "members": []}
+            teams_map[team_name]["totalPoints"] += s.total_points
+            teams_map[team_name]["members"].append({
+                "name": s.full_name,
+                "avatar": s.photo
+            })
+
+        # Sort by totalPoints descending
+        sorted_teams = sorted(teams_map.items(), key=lambda x: x[1]["totalPoints"], reverse=True)
 
         team_leaderboard = []
-        for idx, team in enumerate(teams):
+        for idx, (team_name, data) in enumerate(sorted_teams):
             team_leaderboard.append({
                 "rank": idx + 1,
-                "name": team.team,
-                "points": int(team.team_points or 0)
+                "teamName": team_name,
+                "totalPoints": data["totalPoints"],
+                "memberCount": len(data["members"]),
+                "members": data["members"][:5]  # Limit to top 5 for display
             })
 
         # Cache results in Redis

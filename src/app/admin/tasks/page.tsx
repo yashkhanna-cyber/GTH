@@ -646,8 +646,9 @@ export default function AdminTasksPage() {
                     </button>
                   </form>
                 </div>
-              )
-            })() : (
+              </div>
+            )
+          })() : (
               <div className="rounded-2xl border border-slate-800/60 bg-slate-900/10 p-16 text-center">
                 <ShieldAlert className="w-12 h-12 text-slate-750 mx-auto mb-3" />
                 <h4 className="text-white font-bold text-sm">No Submission Selected</h4>

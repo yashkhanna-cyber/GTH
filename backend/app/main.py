@@ -61,7 +61,7 @@ async def health_check():
     return {"status": "healthy", "redis": redis_service.redis is not None}
 
 # Mount sub-routers
-app.include_router(api_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api")
 app.include_router(ws_router)
 
 # Custom global exception handlers for cleaner API outputs

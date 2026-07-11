@@ -50,7 +50,7 @@ export default function RegisterPage() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, year: parseInt(form.year) }),
+        body: JSON.stringify({ ...form, fullName: form.name, year: parseInt(form.year) }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error || 'Registration failed'); return }

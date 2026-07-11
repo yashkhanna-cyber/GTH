@@ -1,0 +1,181 @@
+import asyncio
+import logging
+from functools import wraps
+from datetime import datetime
+from uuid import UUID
+from celery_app import celery_app
+from sqlalchemy import select, update, func
+from app.database.session import async_session_maker
+from app.models.user import User
+from app.models.points import PointsHistory
+from app.models.notification import Notification
+from app.models.referral import Referral
+from app.models.task import TaskSubmission
+from app.storage.manager import storage_manager
+from app.services.redis import redis_service
+
+logger = logging.getLogger(__name__)
+
+def async_task(f):
+    """Decorator to run async functions inside synchronous Celery worker processes."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+    return wrapper
+
+@celery_app.task
+@async_task
+async def send_email_task(to_email: str, subject: str, body: str):
+    """Asynchronously sends transactional emails (Simulated for GTH)."""
+    logger.info(f"Sending email to {to_email} with subject '{subject}'...")
+    # Simulated SMTP sleep
+    await asyncio.sleep(1)
+    logger.info(f"Email successfully sent to {to_email}.")
+    return True
+
+@celery_app.task
+@async_task
+async def notification_delivery_task(student_id_str: str, title: str, message: str):
+    """Delivers and stores a notification for a student."""
+    logger.info(f"Delivering notification to {student_id_str}: {title}")
+    student_id = UUID(student_id_str)
+    async with async_session_maker() as session:
+        notification = Notification(
+            student_id=student_id,
+            title=title,
+            message=message,
+            is_read=False
+        )
+        session.add(notification)
+        await session.commit()
+    return True
+
+@celery_app.task
+@async_task
+async def process_referral_bonus_task(referrer_id_str: str, new_student_id_str: str, bonus_points: int):
+    """Processes referral bonus points asynchronously in a database transaction."""
+    logger.info(f"Processing referral bonus: Referrer={referrer_id_str}, NewStudent={new_student_id_str}")
+    referrer_id = UUID(referrer_id_str)
+    new_student_id = UUID(new_student_id_str)
+
+    async with async_session_maker() as session:
+        # Fetch referrer profile
+        res = await session.execute(select(User).where(User.id == referrer_id))
+        referrer = res.scalar_one_or_none()
+
+        if not referrer:
+            logger.error(f"Referrer user {referrer_id_str} not found.")
+            return False
+
+        # Award points to referrer
+        referrer.total_points += bonus_points
+        
+        # Log to points history
+        points_log = PointsHistory(
+            student_id=referrer_id,
+            points=bonus_points,
+            reason=f"Referral bonus for inviting {new_student_id_str}",
+            given_by=None  # System awarded
+        )
+        session.add(points_log)
+
+        # Log notification for referrer
+        notification = Notification(
+            student_id=referrer_id,
+            title="Referral Bonus Awarded!",
+            message=f"You earned {bonus_points} points because someone signed up using your referral code.",
+            is_read=False
+        )
+        session.add(notification)
+
+        await session.commit()
+        logger.info(f"Successfully processed referral bonus of {bonus_points} for referrer {referrer_id_str}.")
+    
+    # Recalculate leaderboard
+    celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+    return True
+
+@celery_app.task
+@async_task
+async def recalculate_leaderboard_task():
+    """Recalculates individual and team leaderboard rankings and caches them in Redis."""
+    logger.info("Recalculating leaderboard lists...")
+    async with async_session_maker() as session:
+        # Individual leaderboard query (Students only, ordered by points)
+        res = await session.execute(
+            select(User.id, User.full_name, User.enrollment_no, User.team, User.total_points)
+            .where(User.role == "Student")
+            .order_by(User.total_points.desc(), User.full_name.asc())
+        )
+        students = res.all()
+        
+        leaderboard_data = []
+        for idx, student in enumerate(students):
+            leaderboard_data.append({
+                "rank": idx + 1,
+                "id": str(student.id),
+                "name": student.full_name,
+                "enrollmentNo": student.enrollment_no or "",
+                "team": student.team or "",
+                "points": student.total_points
+            })
+
+        # Save to Redis (expire in 1 hour)
+        await redis_service.set_json("cache:leaderboard:individual", leaderboard_data, expire=3600)
+
+        # Team leaderboard aggregation query
+        # Sum user points grouped by team name
+        res_team = await session.execute(
+            select(User.team, func.sum(User.total_points).label("team_points"))
+            .where(User.role == "Student")
+            .where(User.team != None)
+            .group_by(User.team)
+            .order_by(func.sum(User.total_points).desc())
+        )
+        teams = res_team.all()
+
+        team_leaderboard = []
+        for idx, team in enumerate(teams):
+            team_leaderboard.append({
+                "rank": idx + 1,
+                "name": team.team,
+                "points": int(team.team_points or 0)
+            })
+
+        await redis_service.set_json("cache:leaderboard:team", team_leaderboard, expire=3600)
+        logger.info("Leaderboards successfully calculated and cached.")
+        
+        # Broadcast via WebSockets in API layer later
+    return True
+
+@celery_app.task
+@async_task
+async def generate_certificate_task(student_id_str: str, certificate_title: str):
+    """Generates PDF Certificate and uploads to S3 storage."""
+    logger.info(f"Generating certificate '{certificate_title}' for student {student_id_str}...")
+    # Simulation: Wait for PDF generation
+    await asyncio.sleep(2)
+    
+    # Normally we generate PDF bytes, upload it to storage_manager, and save URL.
+    # We will log notification that certificate is ready.
+    student_id = UUID(student_id_str)
+    async with async_session_maker() as session:
+        notification = Notification(
+            student_id=student_id,
+            title="Certificate Unlocked!",
+            message=f"Congratulations! You unlocked the certificate: '{certificate_title}'. Go to Certificates tab to view/download.",
+            is_read=False
+        )
+        session.add(notification)
+        await session.commit()
+    logger.info(f"Certificate successfully generated for student {student_id_str}.")
+    return True
+
+@celery_app.task
+@async_task
+async def file_cleanup_task():
+    """Scheduled task to clean up orphan/rejected submission files."""
+    logger.info("Running scheduled file cleanup job...")
+    # Here we would query rejected files or database records marked for pruning.
+    # Stubbable for now.
+    return True

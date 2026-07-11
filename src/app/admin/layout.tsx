@@ -30,13 +30,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    if (pathname === '/admin/login') return
+    if (pathname === '/admin/login') {
+      setChecked(false)
+      return
+    }
+    if (checked) return
+
     fetch('/api/auth/me').then(r => r.json()).then(data => {
-      if (data.error || data.user?.role !== 'ADMIN') router.push('/admin/login')
+      if (data.error || data.user?.role !== 'ADMIN') {
+        router.push('/admin/login')
+      } else {
+        setChecked(true)
+      }
     }).catch(() => router.push('/admin/login'))
-  }, [router, pathname])
+  }, [router, pathname, checked])
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })

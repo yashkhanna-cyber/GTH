@@ -1,0 +1,4 @@
+search-path = [
+  "app",
+  "/home/yash/.local/lib/python3.12/site-packages"
+]

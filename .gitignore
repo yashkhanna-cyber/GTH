@@ -41,3 +41,19 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+backend/.venv/
+backend/__pycache__/
+
+# Scratch/temp files
+backend/scratch_*.py
+build.log
+lint.log
+
+# Uploads (local dev)
+/uploads/

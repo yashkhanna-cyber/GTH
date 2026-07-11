@@ -27,7 +27,13 @@ class CertificateTemplateResponse(BaseModel):
     title: str
     description: str
     requiredXp: int
+    required_xp: int
     createdAt: datetime
+    created_at: datetime
 
     class Config:
         from_attributes = True
+
+class CertificateTemplateListResponse(BaseModel):
+    success: bool = True
+    certificates: List[CertificateTemplateResponse]

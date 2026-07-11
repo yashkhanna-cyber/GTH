@@ -14,6 +14,29 @@ from app.schemas.announcement import AnnouncementCreateInput
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin/announcements", tags=["Admin Announcements"])
 
+@router.get("")
+async def get_announcements(db: AsyncSession = Depends(get_db), admin: User = Depends(require_admin)):
+    """
+    Returns list of all announcements (Admin only).
+    """
+    res = await db.execute(select(Announcement).order_by(Announcement.created_at.desc()))
+    announcements = res.scalars().all()
+    return {
+        "success": True,
+        "announcements": [
+            {
+                "id": str(a.id),
+                "title": a.title,
+                "message": a.message,
+                "type": a.type,
+                "target_group": a.target_group,
+                "targetGroup": a.target_group,
+                "created_at": a.created_at.isoformat(),
+                "createdAt": a.created_at.isoformat()
+            } for a in announcements
+        ]
+    }
+
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_announcement(
     data: AnnouncementCreateInput,

@@ -9,25 +9,33 @@ from app.models.user import User
 from app.models.certificate import Certificate
 from app.models.audit_log import AuditLog
 from app.dependencies.auth import require_admin
-from app.schemas.certificate import CertificateTemplateCreateInput, CertificateTemplateResponse
+from app.schemas.certificate import CertificateTemplateCreateInput, CertificateTemplateResponse, CertificateTemplateListResponse
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin/certificates", tags=["Admin Certificates"])
 
-@router.get("", response_model=List[CertificateTemplateResponse])
+@router.get("", response_model=CertificateTemplateListResponse)
 async def get_all_templates(db: AsyncSession = Depends(get_db), admin: User = Depends(require_admin)):
     """
     Returns list of all certificate templates (Admin only).
     """
     res = await db.execute(select(Certificate).order_by(Certificate.required_xp.asc()))
     templates = res.scalars().all()
-    return [CertificateTemplateResponse(
+    
+    formatted = [CertificateTemplateResponse(
         id=t.id,
         title=t.title,
         description=t.description,
         requiredXp=t.required_xp,
-        createdAt=t.created_at
+        required_xp=t.required_xp,
+        createdAt=t.created_at,
+        created_at=t.created_at
     ) for t in templates]
+    
+    return CertificateTemplateListResponse(
+        success=True,
+        certificates=formatted
+    )
 
 @router.post("", response_model=CertificateTemplateResponse, status_code=status.HTTP_201_CREATED)
 async def create_template(
@@ -62,7 +70,9 @@ async def create_template(
         title=template.title,
         description=template.description,
         requiredXp=template.required_xp,
-        createdAt=template.created_at
+        required_xp=template.required_xp,
+        createdAt=template.created_at,
+        created_at=template.created_at
     )
 
 @router.delete("/{certificate_id}")

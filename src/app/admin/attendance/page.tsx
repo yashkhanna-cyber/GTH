@@ -47,6 +47,18 @@ export default function AdminAttendancePage() {
     setError(null)
     try {
       const res = await fetch(`/api/admin/attendance?date=${selectedDate}`)
+      
+      if (!res.ok) {
+        // Handle non-200 responses without trying to parse broken JSON
+        if (res.status === 401) {
+          setError('Session expired. Please log in again.')
+        } else {
+          setError(`Server error (${res.status}). Please try again.`)
+        }
+        setStudents([])
+        return
+      }
+
       const data = await res.json()
 
       if (data.needMigration) {
@@ -54,7 +66,7 @@ export default function AdminAttendancePage() {
         setError(data.error)
         setStudents([])
       } else if (data.success) {
-        setStudents(data.students)
+        setStudents(data.students || [])
         setNeedMigration(false)
       } else {
         setError(data.error || 'Failed to fetch attendance records')

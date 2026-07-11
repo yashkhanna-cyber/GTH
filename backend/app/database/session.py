@@ -3,14 +3,17 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from app.config.settings import settings
 
 # Connection pooling configurations
-# Note: pool_size/max_overflow should match backend scale
+# Reduced pool size for serverless (Vercel) compatibility
 engine = create_async_engine(
     settings.DATABASE_URL,
-    pool_size=20,
-    max_overflow=10,
-    pool_recycle=1800,
+    pool_size=5,
+    max_overflow=5,
+    pool_recycle=300,
     pool_pre_ping=True,
     echo=False,  # Set to True for query logs in development
+    connect_args={
+        "statement_cache_size": 0,  # Required for Supabase/pgbouncer pooler
+    },
 )
 
 async_session_maker = async_sessionmaker(

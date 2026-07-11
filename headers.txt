@@ -1,0 +1,12 @@
+HTTP/2 200 
+cache-control: public, max-age=0, must-revalidate
+content-type: application/json
+date: Sat, 11 Jul 2026 08:58:26 GMT
+server: Vercel
+set-cookie: gth-session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxZGNiM2E3Mi02NGNmLTQzMmMtOGMzZC1kYzU2MTA4ZThlNDkiLCJlbWFpbCI6Inlhc2gua2hhbm5hQGdlZXRhdW5pdmVyc2l0eS5lZHUuaW4iLCJyb2xlIjoiQURNSU4iLCJuYW1lIjoiWWFzaCBLaGFubmEiLCJleHAiOjE3ODM3NjIxMjIsImlhdCI6MTc4Mzc2MDMyMn0.mvkscuUoK2n-obd21PwiOY6j7PNzH98yoyJ3JoeIoLQ; HttpOnly; Max-Age=604800; Path=/; SameSite=lax
+set-cookie: gth-refresh-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxZGNiM2E3Mi02NGNmLTQzMmMtOGMzZC1kYzU2MTA4ZThlNDkiLCJlbWFpbCI6Inlhc2gua2hhbm5hQGdlZXRhdW5pdmVyc2l0eS5lZHUuaW4iLCJyb2xlIjoiQURNSU4iLCJuYW1lIjoiWWFzaCBLaGFubmEiLCJleHAiOjE3ODQzNjUxMjIsImlhdCI6MTc4Mzc2MDMyMiwidHlwZSI6InJlZnJlc2gifQ.wnNsYv9GEAyUcPkMWHyOGomoxcqh6PjhRZ4-MoInioE; HttpOnly; Max-Age=604800; Path=/; SameSite=lax
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-vercel-cache: MISS
+x-vercel-id: bom1::iad1::fcltf-1783760320699-4ef539888634
+content-length: 199
+

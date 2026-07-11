@@ -31,21 +31,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [checked, setChecked] = useState(false)
+  const [authLoading, setAuthLoading] = useState(true)
 
   useEffect(() => {
     if (pathname === '/admin/login') {
       setChecked(false)
+      setAuthLoading(false)
       return
     }
-    if (checked) return
+    if (checked) {
+      setAuthLoading(false)
+      return
+    }
 
-    fetch('/api/auth/me').then(r => r.json()).then(data => {
+    setAuthLoading(true)
+    fetch('/api/auth/me').then(r => {
+      if (!r.ok) throw new Error('Auth failed')
+      return r.json()
+    }).then(data => {
       if (data.error || data.user?.role !== 'ADMIN') {
         router.push('/admin/login')
       } else {
         setChecked(true)
       }
     }).catch(() => router.push('/admin/login'))
+      .finally(() => setAuthLoading(false))
   }, [router, pathname, checked])
 
   const handleLogout = async () => {
@@ -55,6 +65,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (pathname === '/admin/login') {
     return <>{children}</>
+  }
+
+  // Don't render admin pages until auth is confirmed
+  if (authLoading || !checked) {
+    return (
+      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-400 text-sm">Verifying admin session...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

@@ -11,9 +11,17 @@ from app.dependencies.auth import get_current_user_optional
 from app.auth.jwt import COOKIE_NAME, REFRESH_COOKIE_NAME, verify_token, create_access_token
 from app.models.user import User
 from app.middleware.rate_limit import RateLimiter
+from app.config.settings import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+# Cookie settings based on environment
+# Vercel sets VERCEL=1 automatically; also check ENVIRONMENT setting
+import os
+_is_production = os.environ.get("VERCEL") == "1" or settings.ENVIRONMENT.lower() in ("production", "prod")
+_cookie_secure = _is_production
+_cookie_samesite: str = "lax"  # Same domain on Vercel, lax is correct
 
 # Rate limiters
 auth_rate_limiter = RateLimiter(requests_limit=5, window_seconds=60)
@@ -39,8 +47,8 @@ async def register(register_data: RegisterInput, response: Response, db: AsyncSe
         key=COOKIE_NAME,
         value=access_token,
         httponly=True,
-        secure=False,  # Set to True in production (with SSL)
-        samesite="lax",
+        secure=_cookie_secure,
+        samesite=_cookie_samesite,
         max_age=60 * 60 * 24 * 7,  # 7 days
         path="/"
     )
@@ -66,8 +74,8 @@ async def login(login_data: LoginInput, response: Response, db: AsyncSession = D
         key=COOKIE_NAME,
         value=access_token,
         httponly=True,
-        secure=False,  # Set to True in production (with SSL)
-        samesite="lax",
+        secure=_cookie_secure,
+        samesite=_cookie_samesite,
         max_age=60 * 60 * 24 * 7,  # 7 days
         path="/"
     )
@@ -77,8 +85,8 @@ async def login(login_data: LoginInput, response: Response, db: AsyncSession = D
         key=REFRESH_COOKIE_NAME,
         value=refresh_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
+        secure=_cookie_secure,
+        samesite=_cookie_samesite,
         max_age=60 * 60 * 24 * 7,
         path="/"
     )
@@ -185,8 +193,8 @@ async def refresh_token(request: Request, response: Response):
         key=COOKIE_NAME,
         value=access_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
+        secure=_cookie_secure,
+        samesite=_cookie_samesite,
         max_age=60 * 60 * 24 * 7,
         path="/"
     )

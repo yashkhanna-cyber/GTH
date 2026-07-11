@@ -12,7 +12,7 @@ class ProjectCreateInput(BaseModel):
 
 class ProjectResponse(BaseModel):
     id: uuid.UUID
-    title: str
+    name: str
     description: str
     instructionPdf: Optional[str] = None
     assignedTo: str
@@ -21,3 +21,12 @@ class ProjectResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class TeamResponse(BaseModel):
+    id: uuid.UUID
+    name: str
+
+class ProjectListResponse(BaseModel):
+    success: bool = True
+    projects: List[ProjectResponse]
+    teams: Optional[List[TeamResponse]] = None

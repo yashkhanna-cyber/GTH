@@ -10,14 +10,15 @@ from app.database.session import get_db
 from app.models.user import User
 from app.models.project import Project
 from app.models.file_upload import FileUpload
-from app.schemas.project import ProjectCreateInput, ProjectResponse
+from app.models.team import Team
+from app.schemas.project import ProjectCreateInput, ProjectResponse, ProjectListResponse, TeamResponse
 from app.dependencies.auth import get_current_user, require_admin
 from app.storage.manager import storage_manager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
-@router.get("", response_model=List[ProjectResponse])
+@router.get("", response_model=ProjectListResponse)
 async def get_projects(db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user)):
     """
     Returns projects. Students receive only projects assigned to them. Admins receive all.
@@ -39,16 +40,29 @@ async def get_projects(db: AsyncSession = Depends(get_db), current_user: User = 
     result = await db.execute(query)
     projects = result.scalars().all()
 
-    # Format fields to fit schema naming conventions
-    return [ProjectResponse(
+    # Format fields to fit schema naming conventions (map title -> name)
+    formatted_projects = [ProjectResponse(
         id=p.id,
-        title=p.title,
+        name=p.title,
         description=p.description,
         instructionPdf=p.instruction_pdf,
         assignedTo=p.assigned_to,
         assignedTarget=p.assigned_target,
         createdAt=p.created_at
     ) for p in projects]
+
+    formatted_teams = None
+    if current_user.role.upper() == "ADMIN":
+        teams_query = select(Team).order_by(Team.team_name.asc())
+        teams_result = await db.execute(teams_query)
+        db_teams = teams_result.scalars().all()
+        formatted_teams = [TeamResponse(id=t.id, name=t.team_name) for t in db_teams]
+
+    return ProjectListResponse(
+        success=True,
+        projects=formatted_projects,
+        teams=formatted_teams
+    )
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
 async def create_project(
@@ -122,7 +136,7 @@ async def create_project(
 
     return ProjectResponse(
         id=project.id,
-        title=project.title,
+        name=project.title,
         description=project.description,
         instructionPdf=project.instruction_pdf,
         assignedTo=project.assigned_to,

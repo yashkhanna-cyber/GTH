@@ -69,11 +69,33 @@ async def health_check():
 app.include_router(api_router, prefix="/api")
 app.include_router(ws_router)
 
-# Custom global exception handlers for cleaner API outputs
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+# Custom exception handlers for frontend compatibility
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": exc.detail}
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # Extract the first error message for cleaner frontend display
+    error_msg = "Validation Error"
+    if exc.errors():
+        err = exc.errors()[0]
+        error_msg = f"{err.get('loc', [''])[-1]}: {err.get('msg', '')}"
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"error": error_msg}
+    )
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Global exception caught on request {request.url}: {exc}", exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"detail": "An unexpected error occurred. Please try again later."}
+        content={"error": "An unexpected error occurred. Please try again later."}
     )

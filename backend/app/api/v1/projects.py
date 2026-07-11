@@ -74,12 +74,12 @@ async def create_project(
             file_like = BytesIO(file_bytes)
             
             stored_filename, pdf_url = storage_manager.upload_file(
-                file_like, f"project_{uuid.uuid4()[:8]}.pdf", mime_type, bucket="project-pdfs"
+                file_like, f"project_{str(uuid.uuid4())[:8]}.pdf", mime_type, bucket="project-pdfs"
             )
             
             # Save file upload details
             db_upload = FileUpload(
-                original_filename=f"project_{uuid.uuid4()[:8]}.pdf",
+                original_filename=f"project_{str(uuid.uuid4())[:8]}.pdf",
                 stored_filename=stored_filename,
                 file_url=pdf_url,
                 mime_type=mime_type,

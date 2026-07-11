@@ -80,17 +80,28 @@ export default function AdminProjectsPage() {
     setFormError(null)
     setFormSuccess(null)
 
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('description', description)
-    formData.append('assignedTo', assignedTo)
-    formData.append('assignedTarget', assignedTarget)
-    formData.append('file', file)
+    const getBase64 = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result as string)
+        reader.onerror = error => reject(error)
+      })
+    }
 
     try {
+      const base64File = await getBase64(file)
+      
       const res = await fetch('/api/projects', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: name,
+          description: description,
+          assignedTo: assignedTo,
+          assignedTarget: assignedTo !== 'ALL' ? assignedTarget : null,
+          instructionPdf: base64File
+        })
       })
       const data = await res.json()
 

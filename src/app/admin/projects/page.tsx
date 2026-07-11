@@ -231,10 +231,11 @@ export default function AdminProjectsPage() {
                 href={project.instructionPdf}
                 target="_blank"
                 rel="noreferrer"
+                download={`project_${project.name.replace(/\s+/g, '_')}.pdf`}
                 className="w-full py-2.5 bg-slate-900/40 hover:bg-red-500/10 text-slate-300 hover:text-red-400 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border border-slate-800 hover:border-red-500/30 transition-all"
               >
                 <FileText className="w-4 h-4" />
-                View Instruction PDF
+                View / Download PDF
               </a>
             </div>
           ))}

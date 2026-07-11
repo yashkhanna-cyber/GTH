@@ -90,11 +90,24 @@ async def create_project(
             await db.flush()
         except Exception as e:
             logger.error(f"Failed to process project file upload: {e}")
-            # If upload fails, raise error since instructions PDF is important
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Failed to upload project PDF"
-            )
+            
+            # Check if this is a Read-Only filesystem error (Vercel)
+            # or if Supabase is unconfigured, and fallback to Base64 in DB
+            if "Read-only" in str(e) or "Read-only file system" in str(e) or isinstance(e, OSError):
+                logger.info("Falling back to Base64 storage in database due to read-only filesystem.")
+                pdf_url = f"data:{mime_type};base64,{base64_str}"
+            elif "Bucket not found" in str(e):
+                 # Send specific error back to UI
+                 raise HTTPException(
+                     status_code=status.HTTP_400_BAD_REQUEST,
+                     detail="Supabase Error: Please create a public bucket named 'project-pdfs' in your Supabase storage."
+                 )
+            else:
+                # If upload fails, raise error since instructions PDF is important
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Upload Failed: {str(e)}"
+                )
 
     project = Project(
         title=project_data.title,

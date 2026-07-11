@@ -19,8 +19,11 @@ class StorageManager:
             logger.info("Initialized Supabase Storage client (using direct HTTP API).")
         else:
             # Local Storage
-            os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-            logger.info("Initialized Local storage.")
+            try:
+                os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+                logger.info("Initialized Local storage.")
+            except OSError as e:
+                logger.warning(f"Failed to create upload directory (read-only FS?): {e}")
 
     def upload_file(self, file: BinaryIO, filename: str, mime_type: str, bucket: str = None) -> Tuple[str, str]:
         """

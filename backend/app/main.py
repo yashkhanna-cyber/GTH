@@ -40,6 +40,8 @@ origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
+    "https://tech-verse-2026.vercel.app",
+    "*"
 ]
 
 app.add_middleware(
@@ -52,8 +54,11 @@ app.add_middleware(
 
 # Serve local uploads folder if configured
 if settings.STORAGE_PROVIDER.lower() == "local":
-    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
-    app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
+    try:
+        os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+        app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
+    except OSError as e:
+        logger.warning(f"Could not create upload directory (might be a read-only filesystem like Vercel): {e}")
 
 # Health check
 @app.get("/health", tags=["System"])

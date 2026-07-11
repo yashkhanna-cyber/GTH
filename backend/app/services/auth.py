@@ -1,13 +1,13 @@
 import base64
 import logging
+import uuid
 from io import BytesIO
-from typing import Tuple, Optional
+from typing import Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException, status
 from app.models.user import User
 from app.models.referral import Referral
-from app.models.points import PointsHistory
 from app.models.notification import Notification
 from app.schemas.auth import RegisterInput, LoginInput
 from app.auth.password import get_password_hash, verify_password

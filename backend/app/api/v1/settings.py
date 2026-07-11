@@ -7,7 +7,6 @@ from app.models.user import User
 from app.models.settings import SettingsModel
 from app.dependencies.auth import get_current_user, require_admin
 from pydantic import BaseModel
-from typing import Dict, Any
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/settings", tags=["System Settings"])

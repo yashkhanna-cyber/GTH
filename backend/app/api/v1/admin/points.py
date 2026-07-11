@@ -12,7 +12,6 @@ from app.dependencies.auth import require_admin
 from app.schemas.points import AdminPointsAdjustmentInput
 import asyncio
 from app.tasks import background_tasks
-from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin/points", tags=["Admin Points"])

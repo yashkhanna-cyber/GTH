@@ -2,7 +2,7 @@ import logging
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, and_, or_
+from sqlalchemy import select, delete, and_
 from app.database.session import get_db
 from app.models.user import User
 from app.models.announcement import Announcement
@@ -101,4 +101,3 @@ async def delete_announcement(
 
     await db.commit()
     return {"success": True, "message": "Announcement deleted successfully"}
-import datetime

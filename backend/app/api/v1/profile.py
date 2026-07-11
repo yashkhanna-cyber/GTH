@@ -1,8 +1,7 @@
 import base64
 import logging
-import uuid
 from io import BytesIO
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.session import get_db
 from app.models.user import User

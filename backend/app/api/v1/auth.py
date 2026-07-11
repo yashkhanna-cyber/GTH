@@ -2,15 +2,14 @@ import logging
 from fastapi import APIRouter, Depends, Response, Request, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from typing import Dict, Any, Optional
+from typing import Optional
 from app.database.session import get_db
 from app.services.auth import auth_service
 from app.schemas.auth import RegisterInput, LoginInput, AuthResponse
 from app.schemas.user import UserMeResponseWrapper
-from app.dependencies.auth import get_current_user_optional, get_current_user
+from app.dependencies.auth import get_current_user_optional
 from app.auth.jwt import COOKIE_NAME, REFRESH_COOKIE_NAME, verify_token, create_access_token
 from app.models.user import User
-from app.services.redis import redis_service
 from app.middleware.rate_limit import RateLimiter
 
 logger = logging.getLogger(__name__)

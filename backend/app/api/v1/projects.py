@@ -1,7 +1,7 @@
 import base64
 import logging
 import uuid
-from typing import List, Optional
+from typing import List
 from io import BytesIO
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession

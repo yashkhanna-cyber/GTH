@@ -1,9 +1,9 @@
 import logging
 import uuid
-from typing import List, Optional
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, and_
+from sqlalchemy import select, delete
 from app.database.session import get_db
 from app.models.user import User
 from app.models.team import Team

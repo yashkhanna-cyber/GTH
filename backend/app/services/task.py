@@ -5,14 +5,14 @@ from io import BytesIO
 from datetime import datetime
 from typing import Dict, Any, List
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, delete
+from sqlalchemy import select, and_
 from fastapi import HTTPException, status
 from app.models.user import User
 from app.models.task import Task, TaskSubmission
 from app.models.file_upload import FileUpload
 from app.models.points import PointsHistory
 from app.models.notification import Notification
-from app.schemas.task import TaskCreateInput, SubmissionCreateInput, SubmissionReviewInput
+from app.schemas.task import SubmissionCreateInput, SubmissionReviewInput
 from app.storage.manager import storage_manager
 import asyncio
 from app.tasks import background_tasks

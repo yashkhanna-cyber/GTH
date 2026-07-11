@@ -1,8 +1,7 @@
 import logging
-import uuid
-from typing import Dict, Any, List
+from typing import Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, func, or_
+from sqlalchemy import select, and_, func, delete
 from fastapi import HTTPException, status
 from app.models.user import User
 from app.models.team import Team, TeamInvitation

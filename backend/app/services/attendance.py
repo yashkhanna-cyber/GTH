@@ -1,7 +1,5 @@
 import logging
-import uuid
-from datetime import date
-from typing import Dict, Any, List
+from typing import Dict, Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from fastapi import HTTPException, status

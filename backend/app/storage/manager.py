@@ -4,7 +4,6 @@ import uuid
 import logging
 
 from typing import BinaryIO, Tuple
-from fastapi import UploadFile
 from app.config.settings import settings
 
 logger = logging.getLogger(__name__)

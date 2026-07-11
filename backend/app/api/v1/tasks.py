@@ -1,13 +1,13 @@
 import logging
 import uuid
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 from app.database.session import get_db
 from app.models.user import User
-from app.models.task import Task, TaskSubmission
+from app.models.task import Task
 from app.schemas.task import TaskCreateInput, TaskResponse
 from app.dependencies.auth import get_current_user, require_admin
 from app.services.task import task_service

@@ -1,6 +1,6 @@
 import logging
 import datetime
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, and_
 from app.database.session import get_db

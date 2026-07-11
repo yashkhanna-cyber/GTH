@@ -1,6 +1,5 @@
 import uuid
-from datetime import datetime
-from typing import Optional, List, Dict
+from typing import Optional
 from pydantic import BaseModel, EmailStr
 
 class StudentLeaderboard(BaseModel):

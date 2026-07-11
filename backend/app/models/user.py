@@ -11,15 +11,15 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(String, nullable=False)
     email: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String, nullable=False)
-    role: Mapped[str] = mapped_column(String, default="Student", nullable=False)  # 'Student' or 'Admin'
+    role: Mapped[str] = mapped_column(String, default="Student", nullable=False, index=True)  # 'Student' or 'Admin'
     department: Mapped[str] = mapped_column(String, nullable=True)
     team: Mapped[str] = mapped_column(String, nullable=True)  # Keeps string team name for frontend compatibility
-    team_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("teams.id", ondelete="SET NULL"), nullable=True)
+    team_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("teams.id", ondelete="SET NULL"), nullable=True, index=True)
     photo: Mapped[str] = mapped_column(String, nullable=True)
-    total_points: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    total_points: Mapped[int] = mapped_column(Integer, default=0, nullable=False, index=True)
     referral_code: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
     
-    enrollment_no: Mapped[str] = mapped_column(String, nullable=True)
+    enrollment_no: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=True)
     branch: Mapped[str] = mapped_column(String, nullable=True)
     year: Mapped[int] = mapped_column(Integer, default=1, nullable=True)
     batch: Mapped[str] = mapped_column(String, nullable=True)

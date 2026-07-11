@@ -1,16 +1,11 @@
 import asyncio
 import logging
-from functools import wraps
-from datetime import datetime
 from uuid import UUID
-from sqlalchemy import select, update, func
+from sqlalchemy import select, func
 from app.database.session import async_session_maker
 from app.models.user import User
 from app.models.points import PointsHistory
 from app.models.notification import Notification
-from app.models.referral import Referral
-from app.models.task import TaskSubmission
-from app.storage.manager import storage_manager
 from app.services.redis import redis_service
 
 logger = logging.getLogger(__name__)
@@ -42,7 +37,7 @@ async def process_referral_bonus_task(referrer_id_str: str, new_student_id_str: 
     """Processes referral bonus points asynchronously in a database transaction."""
     logger.info(f"Processing referral bonus: Referrer={referrer_id_str}, NewStudent={new_student_id_str}")
     referrer_id = UUID(referrer_id_str)
-    new_student_id = UUID(new_student_id_str)
+    UUID(new_student_id_str)
 
     async with async_session_maker() as session:
         # Fetch referrer profile

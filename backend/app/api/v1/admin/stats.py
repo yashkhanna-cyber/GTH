@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
+from sqlalchemy import select, func
 from app.database.session import get_db
 from app.models.user import User
 from app.models.team import Team

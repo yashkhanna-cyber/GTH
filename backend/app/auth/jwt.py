@@ -1,7 +1,7 @@
 import jwt
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, Optional
+from typing import Optional
 from app.config.settings import settings
 
 logger = logging.getLogger(__name__)

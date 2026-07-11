@@ -41,4 +41,3 @@ class RateLimiter:
         except Exception as e:
             # Fallback in case Redis is unavailable (fail open for UX, but log it)
             logger.error(f"Rate Limiter Redis Error: {e}")
-            pass

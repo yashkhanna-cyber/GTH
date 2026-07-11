@@ -10,7 +10,8 @@ from app.models.notification import Notification
 from app.models.audit_log import AuditLog
 from app.dependencies.auth import require_admin
 from app.schemas.points import AdminPointsAdjustmentInput
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -74,5 +75,5 @@ async def adjust_points(
     await db.commit()
 
     # Recalculate leaderboard
-    celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+    asyncio.create_task(background_tasks.recalculate_leaderboard_task())
     return {"success": True, "message": f"Successfully updated student points by {points_change}."}

@@ -3,7 +3,6 @@ import logging
 from functools import wraps
 from datetime import datetime
 from uuid import UUID
-from celery_app import celery_app
 from sqlalchemy import select, update, func
 from app.database.session import async_session_maker
 from app.models.user import User
@@ -16,15 +15,6 @@ from app.services.redis import redis_service
 
 logger = logging.getLogger(__name__)
 
-def async_task(f):
-    """Decorator to run async functions inside synchronous Celery worker processes."""
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-    return wrapper
-
-@celery_app.task
-@async_task
 async def send_email_task(to_email: str, subject: str, body: str):
     """Asynchronously sends transactional emails (Simulated for GTH)."""
     logger.info(f"Sending email to {to_email} with subject '{subject}'...")
@@ -33,8 +23,6 @@ async def send_email_task(to_email: str, subject: str, body: str):
     logger.info(f"Email successfully sent to {to_email}.")
     return True
 
-@celery_app.task
-@async_task
 async def notification_delivery_task(student_id_str: str, title: str, message: str):
     """Delivers and stores a notification for a student."""
     logger.info(f"Delivering notification to {student_id_str}: {title}")
@@ -50,8 +38,6 @@ async def notification_delivery_task(student_id_str: str, title: str, message: s
         await session.commit()
     return True
 
-@celery_app.task
-@async_task
 async def process_referral_bonus_task(referrer_id_str: str, new_student_id_str: str, bonus_points: int):
     """Processes referral bonus points asynchronously in a database transaction."""
     logger.info(f"Processing referral bonus: Referrer={referrer_id_str}, NewStudent={new_student_id_str}")
@@ -92,11 +78,9 @@ async def process_referral_bonus_task(referrer_id_str: str, new_student_id_str: 
         logger.info(f"Successfully processed referral bonus of {bonus_points} for referrer {referrer_id_str}.")
     
     # Recalculate leaderboard
-    celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+    asyncio.create_task(recalculate_leaderboard_task())
     return True
 
-@celery_app.task
-@async_task
 async def recalculate_leaderboard_task():
     """Recalculates individual and team leaderboard rankings and caches them in Redis."""
     logger.info("Recalculating leaderboard lists...")
@@ -148,8 +132,6 @@ async def recalculate_leaderboard_task():
         # Broadcast via WebSockets in API layer later
     return True
 
-@celery_app.task
-@async_task
 async def generate_certificate_task(student_id_str: str, certificate_title: str):
     """Generates PDF Certificate and uploads to S3 storage."""
     logger.info(f"Generating certificate '{certificate_title}' for student {student_id_str}...")
@@ -171,8 +153,6 @@ async def generate_certificate_task(student_id_str: str, certificate_title: str)
     logger.info(f"Certificate successfully generated for student {student_id_str}.")
     return True
 
-@celery_app.task
-@async_task
 async def file_cleanup_task():
     """Scheduled task to clean up orphan/rejected submission files."""
     logger.info("Running scheduled file cleanup job...")

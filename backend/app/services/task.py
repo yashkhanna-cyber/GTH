@@ -14,7 +14,8 @@ from app.models.points import PointsHistory
 from app.models.notification import Notification
 from app.schemas.task import TaskCreateInput, SubmissionCreateInput, SubmissionReviewInput
 from app.storage.manager import storage_manager
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +239,7 @@ class TaskService:
         await db.commit()
 
         # Recalculate leaderboard
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True}
 
 task_service = TaskService()

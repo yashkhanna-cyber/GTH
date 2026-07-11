@@ -11,7 +11,8 @@ from app.models.points import PointsHistory
 from app.models.notification import Notification
 from app.models.audit_log import AuditLog
 from app.dependencies.auth import require_admin
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -146,7 +147,7 @@ async def handle_team_action(
 
         await db.commit()
         
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True, "message": "Team details updated successfully"}
 
     elif payload.action == "DELETE":
@@ -175,7 +176,7 @@ async def handle_team_action(
 
         await db.commit()
         
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True, "message": "Team deleted successfully"}
 
     elif payload.action == "POINTS":
@@ -231,7 +232,7 @@ async def handle_team_action(
 
         await db.commit()
         
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True, "message": "Points successfully applied to all team members"}
 
     elif payload.action == "APPRECIATE":

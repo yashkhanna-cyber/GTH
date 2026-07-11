@@ -13,7 +13,8 @@ from app.schemas.auth import RegisterInput, LoginInput
 from app.auth.password import get_password_hash, verify_password
 from app.auth.jwt import create_access_token, create_refresh_token
 from app.storage.manager import storage_manager
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -116,10 +117,7 @@ class AuthService:
             db.add(referral_entry)
             
             # Enqueue asynchronous bonus processing task to prevent transaction blocking
-            celery_app.send_task(
-                "app.tasks.background_tasks.process_referral_bonus_task",
-                args=[str(referrer.id), str(new_user.id), referral_bonus]
-            )
+            asyncio.create_task(background_tasks.process_referral_bonus_task(str(referrer.id), str(new_user.id), referral_bonus))
 
         # Welcome notification
         welcome_notif = Notification(
@@ -133,7 +131,7 @@ class AuthService:
         await db.commit()
         
         # Trigger leaderboard recalculation task
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         
         return new_user
 

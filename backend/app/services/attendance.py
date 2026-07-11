@@ -10,7 +10,8 @@ from app.models.attendance import Attendance
 from app.models.points import PointsHistory
 from app.models.notification import Notification
 from app.schemas.attendance import AdminAttendanceUpdateInput
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +173,7 @@ class AttendanceService:
         await db.commit()
 
         # Recalculate leaderboard
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True}
 
 attendance_service = AttendanceService()

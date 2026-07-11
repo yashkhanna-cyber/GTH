@@ -8,7 +8,8 @@ from app.models.user import User
 from app.models.team import Team, TeamInvitation
 from app.models.notification import Notification
 from app.schemas.team import TeamCreateInput, TeamInviteActionInput
-from celery_app import celery_app
+import asyncio
+from app.tasks import background_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -222,7 +223,7 @@ class TeamService:
         await db.commit()
         
         # Async tasks
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         return {"success": True, "message": "Team created successfully and invitations sent!"}
 
     async def process_invite_action(self, db: AsyncSession, user: User, data: TeamInviteActionInput) -> Dict[str, Any]:
@@ -303,7 +304,7 @@ class TeamService:
         await db.commit()
         
         # Async tasks
-        celery_app.send_task("app.tasks.background_tasks.recalculate_leaderboard_task")
+        asyncio.create_task(background_tasks.recalculate_leaderboard_task())
         
         action_label = "accepted" if data.action == "ACCEPT" else "declined"
         return {"success": True, "message": f"Invitation successfully {action_label}"}

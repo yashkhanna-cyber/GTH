@@ -5,9 +5,10 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
+from sqlalchemy.orm import selectinload
 from app.database.session import get_db
 from app.models.user import User
-from app.models.task import Task
+from app.models.task import Task, TaskSubmission
 from app.models.team import Team
 from app.schemas.task import TaskCreateInput, TaskResponse, TaskListResponse, TaskTeamResponse
 from app.dependencies.auth import get_current_user, require_admin
@@ -24,20 +25,53 @@ async def get_tasks(db: AsyncSession = Depends(get_db), current_user: User = Dep
     """
     formatted_tasks = []
     if current_user.role.upper() == "ADMIN":
-        res = await db.execute(select(Task).order_by(Task.deadline.asc()))
+        query = (
+            select(Task)
+            .options(selectinload(Task.submissions).selectinload(TaskSubmission.student))
+            .order_by(Task.deadline.asc())
+        )
+        res = await db.execute(query)
         tasks = res.scalars().all()
-        formatted_tasks = [TaskResponse(
-            id=t.id,
-            name=t.title,
-            description=t.description or "",
-            rules=t.rules or "",
-            points=t.points,
-            deadline=t.deadline,
-            referenceFile=t.reference_file or "",
-            assignedTo=t.assigned_to,
-            assignedTarget=t.assigned_target or "",
-            createdAt=t.created_at
-        ) for t in tasks]
+        for t in tasks:
+            subs = []
+            for s in t.submissions:
+                student_detail = None
+                if s.student:
+                    student_detail = {
+                        "id": s.student.id,
+                        "enrollmentNo": s.student.enrollment_no or "",
+                        "batch": s.student.batch,
+                        "user": {
+                            "name": s.student.full_name,
+                            "email": s.student.email
+                        }
+                    }
+                subs.append({
+                    "id": s.id,
+                    "uploadedFile": s.uploaded_file,
+                    "comment": s.comment or "",
+                    "comments": s.comment or "",
+                    "status": s.status,
+                    "reviewComment": s.review_comment or "",
+                    "reviewComments": s.review_comment or "",
+                    "pointsAwarded": s.points_awarded,
+                    "submittedAt": s.submitted_at,
+                    "student": student_detail
+                })
+            
+            formatted_tasks.append(TaskResponse(
+                id=t.id,
+                name=t.title,
+                description=t.description or "",
+                rules=t.rules or "",
+                points=t.points,
+                deadline=t.deadline,
+                referenceFile=t.reference_file or "",
+                assignedTo=t.assigned_to,
+                assignedTarget=t.assigned_target or "",
+                createdAt=t.created_at,
+                submissions=subs
+            ))
     else:
         # Student-specific list using task service
         tasks_data = await task_service.get_student_tasks(db, current_user)

@@ -218,7 +218,7 @@ class TaskService:
 
         # Update submission
         sub.status = data.status.upper()
-        sub.review_comment = data.reviewComment
+        sub.review_comment = data.reviewComment or data.reviewComments
         sub.points_awarded = data.pointsAwarded
         db.add(sub)
 
@@ -241,7 +241,7 @@ class TaskService:
         notification = Notification(
             student_id=student.id,
             title=f"Task Submission {status_label}",
-            message=f"Your submission for '{sub.task.title if sub.task else 'Task'}' has been reviewed by an Admin. Status: {status_label}. Points Awarded: {data.pointsAwarded}. Comments: {data.reviewComment or 'None'}",
+            message=f"Your submission for '{sub.task.title if sub.task else 'Task'}' has been reviewed by an Admin. Status: {status_label}. Points Awarded: {data.pointsAwarded}. Comments: {data.reviewComment or data.reviewComments or 'None'}",
             is_read=False
         )
         db.add(notification)

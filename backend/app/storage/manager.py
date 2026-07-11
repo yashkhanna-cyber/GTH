@@ -2,8 +2,7 @@ import os
 import shutil
 import uuid
 import logging
-import boto3
-from botocore.client import Config
+
 from typing import BinaryIO, Tuple
 from fastapi import UploadFile
 from app.config.settings import settings
@@ -16,27 +15,7 @@ class StorageManager:
         self.bucket = settings.STORAGE_BUCKET
         self.s3_client = None
 
-        if self.provider in ["s3", "minio", "r2"]:
-            try:
-                client_kwargs = {
-                    "aws_access_key_id": settings.STORAGE_ACCESS_KEY,
-                    "aws_secret_access_key": settings.STORAGE_SECRET_KEY,
-                    "region_name": settings.STORAGE_REGION,
-                }
-                
-                # Check for custom endpoint (MinIO, R2)
-                if settings.STORAGE_ENDPOINT:
-                    client_kwargs["endpoint_url"] = settings.STORAGE_ENDPOINT
-
-                # Use path-style addressing for MinIO
-                if self.provider == "minio":
-                    client_kwargs["config"] = Config(signature_version="s3v4")
-                    
-                self.s3_client = boto3.client("s3", **client_kwargs)
-                logger.info(f"Initialized S3-compatible storage client via provider: {self.provider}")
-            except Exception as e:
-                logger.error(f"Failed to initialize S3 storage client: {e}")
-        elif self.provider == "supabase":
+        if self.provider == "supabase":
             logger.info("Initialized Supabase Storage client (using direct HTTP API).")
         else:
             # Local Storage
@@ -82,26 +61,7 @@ class StorageManager:
             file_url = f"/uploads/{stored_filename}"
             return stored_filename, file_url
         else:
-            # Store in S3-compatible storage
-            try:
-                self.s3_client.upload_fileobj(
-                    file,
-                    bucket_name,
-                    stored_filename,
-                    ExtraArgs={"ContentType": mime_type}
-                )
-                
-                # Generate File URL
-                if settings.STORAGE_ENDPOINT:
-                    file_url = f"{settings.STORAGE_ENDPOINT}/{bucket_name}/{stored_filename}"
-                else:
-                    file_url = f"https://{bucket_name}.s3.{settings.STORAGE_REGION}.amazonaws.com/{stored_filename}"
-                
-                return stored_filename, file_url
-            except Exception as e:
-                logger.error(f"S3 Upload Error: {e}")
-                raise e
-
+            raise Exception("Unsupported storage provider")
     def delete_file(self, stored_filename: str, bucket: str = None) -> bool:
         """
         Deletes a file from the configured storage provider.
@@ -129,11 +89,6 @@ class StorageManager:
                 return True
             return False
         else:
-            try:
-                self.s3_client.delete_object(Bucket=bucket_name, Key=stored_filename)
-                return True
-            except Exception as e:
-                logger.error(f"S3 Delete Error: {e}")
-                return False
+            return False
 
 storage_manager = StorageManager()
